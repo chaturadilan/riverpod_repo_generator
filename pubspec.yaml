@@ -1,7 +1,7 @@
 name: riverpod_repo
-description: A new Flutter package project.
-version: 0.0.1
-homepage:
+description: A Lib to build Riverpod providers based on the reposirory interfaces.
+version: 1.0.0
+homepage: https://dilan.me
 
 environment:
   sdk: '>=2.19.4 <3.0.0'
@@ -10,9 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  build:
-  source_gen:  
-  recase:
+  build: ^2.3.1
+  source_gen: ^1.2.7
+  recase: ^4.1.0
+  analyzer: ^5.9.0
 
 dev_dependencies:
   flutter_test:
