@@ -1,4 +1,4 @@
-# Repo Gnerator with Riverpod
+# Repo Generator with Riverpod
 
 ## Getting Started
 
