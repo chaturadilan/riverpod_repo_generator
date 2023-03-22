@@ -6,4 +6,8 @@
 
 * Fixing the Dependancies
 
+## 1.0.2
+
+* Added Repo URL
+
 
