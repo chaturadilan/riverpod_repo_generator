@@ -27,5 +27,9 @@
 
 * Added repo and method
 
+## 1.0.7
+
+* Fixed bug related to method
+
 
 
