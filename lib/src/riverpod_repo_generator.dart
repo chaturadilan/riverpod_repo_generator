@@ -54,7 +54,10 @@ class RiverPodRepoGenerator
 
       // write the class and method
       buffer.writeln(
-        "/// Repositroy: ${className.pascalCase}  Method: $methodNameCamelCase",
+        "/// Repositroy: ${className.pascalCase}, Method: $methodNameCamelCase ",
+      );
+      buffer.writeln(
+        "///",
       );
 
       //write the comments

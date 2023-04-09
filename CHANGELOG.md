@@ -31,5 +31,9 @@
 
 * Fixed bug related to method
 
+## 1.0.8
+
+* Fixed bug related doc comment
+
 
 

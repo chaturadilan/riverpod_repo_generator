@@ -1,6 +1,6 @@
 name: riverpod_repo
 description: A Lib to build Riverpod providers based on the reposirory interfaces.
-version: 1.0.7
+version: 1.0.8
 homepage: https://dilan.me
 repository: https://github.com/chaturadilan/riverpod_repo_generator
 
