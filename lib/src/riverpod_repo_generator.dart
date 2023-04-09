@@ -52,6 +52,11 @@ class RiverPodRepoGenerator
           "${element.name}(",
           "${methodName.camelCase}(${methodName.pascalCase}Ref ref,");
 
+      // write the class and method
+      buffer.writeln(
+        "/// Repositroy: ${className.pascalCase}  Method: ${methodName.camelCase}",
+      );
+
       //write the comments
       var comments = visitor.methods.values.elementAt(i)["comments"];
       if (comments != null) {
