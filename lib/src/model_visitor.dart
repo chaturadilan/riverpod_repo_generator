@@ -15,21 +15,24 @@ class ModelVisitor extends SimpleElementVisitor<void> {
   Map<String, dynamic> fields = {};
   Map<String, dynamic> methods = {};
 
+  /// Create the visit constructor element
   @override
   void visitConstructorElement(ConstructorElement element) {
     final returnType = element.returnType.toString();
     className = returnType.replaceFirst('*', '');
   }
 
+  /// Create the visit field element
   @override
   void visitFieldElement(FieldElement element) {
     fields[element.name] = element.type.toString().replaceFirst('*', '');
   }
 
+  /// Create the visit method element
   @override
   void visitMethodElement(MethodElement element) {
     methods[element.name] = {
-      // "returnType": element.returnType.toString().replaceFirst('*', ''),
+      'comments': element.documentationComment,
       'element': element,
       "returnType": element.returnType,
       "parameters": element.parameters

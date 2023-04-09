@@ -17,6 +17,7 @@ import 'model_visitor.dart';
 
 class RiverPodRepoGenerator
     extends GeneratorForAnnotation<RiverpodRepoAnnotation> {
+  /// Generate the annotated element
   @override
   String generateForAnnotatedElement(
     Element element,
@@ -49,6 +50,14 @@ class RiverPodRepoGenerator
       String signture = element.declaration.toString().replaceFirst(
           "${element.name}(",
           "${methodName.camelCase}(${methodName.pascalCase}Ref ref,");
+
+      //write the comments
+      var comments = visitor.methods.values.elementAt(i)["comments"];
+      if (comments != null) {
+        buffer.writeln(comments);
+      }
+
+      // writes the riverpod annotation
       buffer.writeln(
         "@riverpod",
       );
