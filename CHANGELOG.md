@@ -19,5 +19,9 @@
 
 * Added doc comments support
 
+## 1.0.5
+
+* Fixed the platform support
+
 
 
