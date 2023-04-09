@@ -23,5 +23,9 @@
 
 * Fixed the platform support
 
+## 1.0.6
+
+* Added repo and method
+
 
 
