@@ -15,5 +15,9 @@
 
 * Added example
 
+## 1.0.4
+
+* Added doc comments support
+
 
 
