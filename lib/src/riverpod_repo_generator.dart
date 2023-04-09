@@ -15,6 +15,7 @@ import 'package:source_gen/source_gen.dart';
 import '../annotations.dart';
 import 'model_visitor.dart';
 
+/// RiverPodRepoGenerator class of the Riverpod Repo
 class RiverPodRepoGenerator
     extends GeneratorForAnnotation<RiverpodRepoAnnotation> {
   /// Generate the annotated element

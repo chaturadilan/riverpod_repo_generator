@@ -10,6 +10,7 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 
+/// ModelVisitor class of the Riverpod Repo
 class ModelVisitor extends SimpleElementVisitor<void> {
   String className = '';
   Map<String, dynamic> fields = {};
