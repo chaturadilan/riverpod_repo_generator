@@ -35,5 +35,9 @@
 
 * Fixed bug related doc comment
 
+## 1.0.9
+
+* Fixed the README
+
 
 

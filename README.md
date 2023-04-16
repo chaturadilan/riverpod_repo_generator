@@ -18,6 +18,9 @@ part 'data_repo.repo.g.dart';
 ```
 4. Create a provider to access the implementation of your repository
 5. Run the builder
+```
+ flutter pub run build_runner build --delete-conflicting-outputs
+```
 6. It will create a Riverpod Providers for each abstract methods which defined in your repositrory
 
 
