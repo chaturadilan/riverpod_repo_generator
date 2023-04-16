@@ -43,5 +43,9 @@
 
 * Fixed the README repository pattern
 
+## 1.0.11
+
+* Fixed the README codes
+
 
 

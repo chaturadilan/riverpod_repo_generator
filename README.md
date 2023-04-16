@@ -57,24 +57,22 @@ abstract class RepoData {
 class RepoDataImpl implements RepoData {
   @override
   Future<List<String>> getBooks({String search = '', String categoryId = ''}) {
-    throw UnimplementedError();
+    // The implementation logic should be written in this section
   }
 
   @override
   Future<List<String>> getCategories({String search = ''}) {
-    throw UnimplementedError();
+    // The implementation logic should be written in this section
   }
 
   @override
   Future<List<bool>> getTopBooksByGenre(String genreId, {String search = ''}) {
-    // TODO: implement getTopBooksByGenre
-    throw UnimplementedError();
+    // The implementation logic should be written in this section
   }
 
   @override
   Future<List<int>> getTopGenres() {
-    // TODO: implement getTopGenres
-    throw UnimplementedError();
+    // The implementation logic should be written in this section
   }
 }
 
@@ -128,6 +126,18 @@ Future<List<String>> repoDataGetCategories(RepoDataGetCategoriesRef ref,
 
 
 ```
+
+Now you can use your Riverpod Providers anywhare in your application as follows
+
+```
+    ref.watch(repoDataGetCategoriesProvider).when(
+    loading: () => const CircularProgressIndicator(),
+    error: (err, stack) => Text('Error: $err'),
+    data: (categories) {
+      return Text(categories.toString());
+    },
+```
+
 
 ## Important
 
