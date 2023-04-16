@@ -2,7 +2,11 @@
 
 ## Getting Started
 
-This is a Flutter code generator to generate Riverpod Providers based on the Repository method
+This is a Flutter code generator to generate Riverpod Providers based on the Repository pattern.
+
+The repository pattern is used to separate the concerns of data access and storage from the rest of the application logic. It provides a consistent interface for accessing and manipulating data regardless of the underlying data storage technology, such as a database or file system.
+
+In this pattern, the application interacts with a repository interface, which acts as a mediator between the data access layer and the business logic layer. The repository interface provides a set of methods that can be used to perform operations on the data.
 
 
 ### How To
