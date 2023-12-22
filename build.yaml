@@ -18,4 +18,5 @@ builders:
     build_extensions: { ".dart": [".repo.g.dart"] }
     auto_apply: dependents
     build_to:  source
+    applies_builders: ["source_gen|combining_builder"]
     runs_before: ["riverpod_generator"]

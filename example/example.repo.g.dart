@@ -6,6 +6,9 @@ part of 'example.dart';
 // RiverPodRepoGenerator
 // **************************************************************************
 
+/// Repositroy: RepoData, Method: getBooks
+///
+/// Get the books
 @riverpod
 Future<List<String>> repoDataGetBooks(RepoDataGetBooksRef ref,
     {String search = '', String categoryId = ''}) {
@@ -15,6 +18,9 @@ Future<List<String>> repoDataGetBooks(RepoDataGetBooksRef ref,
       );
 }
 
+/// Repositroy: RepoData, Method: getTopGenres
+///
+/// Get the top  genres
 @riverpod
 Future<List<int>> repoDataGetTopGenres(
   RepoDataGetTopGenresRef ref,
@@ -22,6 +28,9 @@ Future<List<int>> repoDataGetTopGenres(
   return ref.watch(repoDataProvider).getTopGenres();
 }
 
+/// Repositroy: RepoData, Method: getTopBooksByGenre
+///
+/// Get the top books by genre
 @riverpod
 Future<List<bool>> repoDataGetTopBooksByGenre(
     RepoDataGetTopBooksByGenreRef ref, String genreId,
@@ -32,6 +41,8 @@ Future<List<bool>> repoDataGetTopBooksByGenre(
       );
 }
 
+/// Repositroy: RepoData, Method: getCategories
+///
 @riverpod
 Future<List<String>> repoDataGetCategories(RepoDataGetCategoriesRef ref,
     {String search = ''}) {
