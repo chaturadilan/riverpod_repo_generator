@@ -14,8 +14,12 @@ targets:
 builders:
   riverpod_repo:
     import: "package:riverpod_repo/riverpod_repo.dart"
-    builder_factories: ["generateRiverpodRepo"] #Builder name(BuilderOptions)
+    builder_factories: ["generateRiverpodRepo"]
     build_extensions: { ".dart": [".repo.g.dart"] }
     auto_apply: dependents
     build_to:  source
-    runs_before: ["riverpod_generator"]
+
+global_options:
+  riverpod_repo:
+    runs_before:
+      - riverpod_generator
