@@ -43,18 +43,32 @@ class _SystemHash {
   }
 }
 
-typedef RepoDataGetBooksRef = AutoDisposeFutureProviderRef<List<String>>;
-
-/// See also [repoDataGetBooks].
+/// Repositroy: RepoData, Method: getBooks
+///
+/// Get the books
+///
+/// Copied from [repoDataGetBooks].
 @ProviderFor(repoDataGetBooks)
 const repoDataGetBooksProvider = RepoDataGetBooksFamily();
 
-/// See also [repoDataGetBooks].
+/// Repositroy: RepoData, Method: getBooks
+///
+/// Get the books
+///
+/// Copied from [repoDataGetBooks].
 class RepoDataGetBooksFamily extends Family<AsyncValue<List<String>>> {
-  /// See also [repoDataGetBooks].
+  /// Repositroy: RepoData, Method: getBooks
+  ///
+  /// Get the books
+  ///
+  /// Copied from [repoDataGetBooks].
   const RepoDataGetBooksFamily();
 
-  /// See also [repoDataGetBooks].
+  /// Repositroy: RepoData, Method: getBooks
+  ///
+  /// Get the books
+  ///
+  /// Copied from [repoDataGetBooks].
   RepoDataGetBooksProvider call({
     String search = '',
     String categoryId = '',
@@ -90,15 +104,23 @@ class RepoDataGetBooksFamily extends Family<AsyncValue<List<String>>> {
   String? get name => r'repoDataGetBooksProvider';
 }
 
-/// See also [repoDataGetBooks].
+/// Repositroy: RepoData, Method: getBooks
+///
+/// Get the books
+///
+/// Copied from [repoDataGetBooks].
 class RepoDataGetBooksProvider extends AutoDisposeFutureProvider<List<String>> {
-  /// See also [repoDataGetBooks].
+  /// Repositroy: RepoData, Method: getBooks
+  ///
+  /// Get the books
+  ///
+  /// Copied from [repoDataGetBooks].
   RepoDataGetBooksProvider({
-    this.search = '',
-    this.categoryId = '',
-  }) : super.internal(
+    String search = '',
+    String categoryId = '',
+  }) : this._internal(
           (ref) => repoDataGetBooks(
-            ref,
+            ref as RepoDataGetBooksRef,
             search: search,
             categoryId: categoryId,
           ),
@@ -111,10 +133,47 @@ class RepoDataGetBooksProvider extends AutoDisposeFutureProvider<List<String>> {
           dependencies: RepoDataGetBooksFamily._dependencies,
           allTransitiveDependencies:
               RepoDataGetBooksFamily._allTransitiveDependencies,
+          search: search,
+          categoryId: categoryId,
         );
+
+  RepoDataGetBooksProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.search,
+    required this.categoryId,
+  }) : super.internal();
 
   final String search;
   final String categoryId;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<String>> Function(RepoDataGetBooksRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: RepoDataGetBooksProvider._internal(
+        (ref) => create(ref as RepoDataGetBooksRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        search: search,
+        categoryId: categoryId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<String>> createElement() {
+    return _RepoDataGetBooksProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -133,10 +192,33 @@ class RepoDataGetBooksProvider extends AutoDisposeFutureProvider<List<String>> {
   }
 }
 
+mixin RepoDataGetBooksRef on AutoDisposeFutureProviderRef<List<String>> {
+  /// The parameter `search` of this provider.
+  String get search;
+
+  /// The parameter `categoryId` of this provider.
+  String get categoryId;
+}
+
+class _RepoDataGetBooksProviderElement
+    extends AutoDisposeFutureProviderElement<List<String>>
+    with RepoDataGetBooksRef {
+  _RepoDataGetBooksProviderElement(super.provider);
+
+  @override
+  String get search => (origin as RepoDataGetBooksProvider).search;
+  @override
+  String get categoryId => (origin as RepoDataGetBooksProvider).categoryId;
+}
+
 String _$repoDataGetTopGenresHash() =>
     r'b16ac50e969229685d19013c557c0f59ed7d4085';
 
-/// See also [repoDataGetTopGenres].
+/// Repositroy: RepoData, Method: getTopGenres
+///
+/// Get the top  genres
+///
+/// Copied from [repoDataGetTopGenres].
 @ProviderFor(repoDataGetTopGenres)
 final repoDataGetTopGenresProvider =
     AutoDisposeFutureProvider<List<int>>.internal(
@@ -152,19 +234,33 @@ final repoDataGetTopGenresProvider =
 typedef RepoDataGetTopGenresRef = AutoDisposeFutureProviderRef<List<int>>;
 String _$repoDataGetTopBooksByGenreHash() =>
     r'4ee0efb8b4903ffc14e783c8c43e4567cdfc346c';
-typedef RepoDataGetTopBooksByGenreRef
-    = AutoDisposeFutureProviderRef<List<bool>>;
 
-/// See also [repoDataGetTopBooksByGenre].
+/// Repositroy: RepoData, Method: getTopBooksByGenre
+///
+/// Get the top books by genre
+///
+/// Copied from [repoDataGetTopBooksByGenre].
 @ProviderFor(repoDataGetTopBooksByGenre)
 const repoDataGetTopBooksByGenreProvider = RepoDataGetTopBooksByGenreFamily();
 
-/// See also [repoDataGetTopBooksByGenre].
+/// Repositroy: RepoData, Method: getTopBooksByGenre
+///
+/// Get the top books by genre
+///
+/// Copied from [repoDataGetTopBooksByGenre].
 class RepoDataGetTopBooksByGenreFamily extends Family<AsyncValue<List<bool>>> {
-  /// See also [repoDataGetTopBooksByGenre].
+  /// Repositroy: RepoData, Method: getTopBooksByGenre
+  ///
+  /// Get the top books by genre
+  ///
+  /// Copied from [repoDataGetTopBooksByGenre].
   const RepoDataGetTopBooksByGenreFamily();
 
-  /// See also [repoDataGetTopBooksByGenre].
+  /// Repositroy: RepoData, Method: getTopBooksByGenre
+  ///
+  /// Get the top books by genre
+  ///
+  /// Copied from [repoDataGetTopBooksByGenre].
   RepoDataGetTopBooksByGenreProvider call(
     String genreId, {
     String search = '',
@@ -200,16 +296,24 @@ class RepoDataGetTopBooksByGenreFamily extends Family<AsyncValue<List<bool>>> {
   String? get name => r'repoDataGetTopBooksByGenreProvider';
 }
 
-/// See also [repoDataGetTopBooksByGenre].
+/// Repositroy: RepoData, Method: getTopBooksByGenre
+///
+/// Get the top books by genre
+///
+/// Copied from [repoDataGetTopBooksByGenre].
 class RepoDataGetTopBooksByGenreProvider
     extends AutoDisposeFutureProvider<List<bool>> {
-  /// See also [repoDataGetTopBooksByGenre].
+  /// Repositroy: RepoData, Method: getTopBooksByGenre
+  ///
+  /// Get the top books by genre
+  ///
+  /// Copied from [repoDataGetTopBooksByGenre].
   RepoDataGetTopBooksByGenreProvider(
-    this.genreId, {
-    this.search = '',
-  }) : super.internal(
+    String genreId, {
+    String search = '',
+  }) : this._internal(
           (ref) => repoDataGetTopBooksByGenre(
-            ref,
+            ref as RepoDataGetTopBooksByGenreRef,
             genreId,
             search: search,
           ),
@@ -222,10 +326,48 @@ class RepoDataGetTopBooksByGenreProvider
           dependencies: RepoDataGetTopBooksByGenreFamily._dependencies,
           allTransitiveDependencies:
               RepoDataGetTopBooksByGenreFamily._allTransitiveDependencies,
+          genreId: genreId,
+          search: search,
         );
+
+  RepoDataGetTopBooksByGenreProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.genreId,
+    required this.search,
+  }) : super.internal();
 
   final String genreId;
   final String search;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<bool>> Function(RepoDataGetTopBooksByGenreRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: RepoDataGetTopBooksByGenreProvider._internal(
+        (ref) => create(ref as RepoDataGetTopBooksByGenreRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        genreId: genreId,
+        search: search,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<bool>> createElement() {
+    return _RepoDataGetTopBooksByGenreProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -244,20 +386,51 @@ class RepoDataGetTopBooksByGenreProvider
   }
 }
 
+mixin RepoDataGetTopBooksByGenreRef
+    on AutoDisposeFutureProviderRef<List<bool>> {
+  /// The parameter `genreId` of this provider.
+  String get genreId;
+
+  /// The parameter `search` of this provider.
+  String get search;
+}
+
+class _RepoDataGetTopBooksByGenreProviderElement
+    extends AutoDisposeFutureProviderElement<List<bool>>
+    with RepoDataGetTopBooksByGenreRef {
+  _RepoDataGetTopBooksByGenreProviderElement(super.provider);
+
+  @override
+  String get genreId => (origin as RepoDataGetTopBooksByGenreProvider).genreId;
+  @override
+  String get search => (origin as RepoDataGetTopBooksByGenreProvider).search;
+}
+
 String _$repoDataGetCategoriesHash() =>
     r'1096c87ff6c36a10e742f31abd58623c2d029681';
-typedef RepoDataGetCategoriesRef = AutoDisposeFutureProviderRef<List<String>>;
 
-/// See also [repoDataGetCategories].
+/// Repositroy: RepoData, Method: getCategories
+///
+///
+/// Copied from [repoDataGetCategories].
 @ProviderFor(repoDataGetCategories)
 const repoDataGetCategoriesProvider = RepoDataGetCategoriesFamily();
 
-/// See also [repoDataGetCategories].
+/// Repositroy: RepoData, Method: getCategories
+///
+///
+/// Copied from [repoDataGetCategories].
 class RepoDataGetCategoriesFamily extends Family<AsyncValue<List<String>>> {
-  /// See also [repoDataGetCategories].
+  /// Repositroy: RepoData, Method: getCategories
+  ///
+  ///
+  /// Copied from [repoDataGetCategories].
   const RepoDataGetCategoriesFamily();
 
-  /// See also [repoDataGetCategories].
+  /// Repositroy: RepoData, Method: getCategories
+  ///
+  ///
+  /// Copied from [repoDataGetCategories].
   RepoDataGetCategoriesProvider call({
     String search = '',
   }) {
@@ -290,15 +463,21 @@ class RepoDataGetCategoriesFamily extends Family<AsyncValue<List<String>>> {
   String? get name => r'repoDataGetCategoriesProvider';
 }
 
-/// See also [repoDataGetCategories].
+/// Repositroy: RepoData, Method: getCategories
+///
+///
+/// Copied from [repoDataGetCategories].
 class RepoDataGetCategoriesProvider
     extends AutoDisposeFutureProvider<List<String>> {
-  /// See also [repoDataGetCategories].
+  /// Repositroy: RepoData, Method: getCategories
+  ///
+  ///
+  /// Copied from [repoDataGetCategories].
   RepoDataGetCategoriesProvider({
-    this.search = '',
-  }) : super.internal(
+    String search = '',
+  }) : this._internal(
           (ref) => repoDataGetCategories(
-            ref,
+            ref as RepoDataGetCategoriesRef,
             search: search,
           ),
           from: repoDataGetCategoriesProvider,
@@ -310,9 +489,43 @@ class RepoDataGetCategoriesProvider
           dependencies: RepoDataGetCategoriesFamily._dependencies,
           allTransitiveDependencies:
               RepoDataGetCategoriesFamily._allTransitiveDependencies,
+          search: search,
         );
 
+  RepoDataGetCategoriesProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.search,
+  }) : super.internal();
+
   final String search;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<String>> Function(RepoDataGetCategoriesRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: RepoDataGetCategoriesProvider._internal(
+        (ref) => create(ref as RepoDataGetCategoriesRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        search: search,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<String>> createElement() {
+    return _RepoDataGetCategoriesProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -327,4 +540,19 @@ class RepoDataGetCategoriesProvider
     return _SystemHash.finish(hash);
   }
 }
-// ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions
+
+mixin RepoDataGetCategoriesRef on AutoDisposeFutureProviderRef<List<String>> {
+  /// The parameter `search` of this provider.
+  String get search;
+}
+
+class _RepoDataGetCategoriesProviderElement
+    extends AutoDisposeFutureProviderElement<List<String>>
+    with RepoDataGetCategoriesRef {
+  _RepoDataGetCategoriesProviderElement(super.provider);
+
+  @override
+  String get search => (origin as RepoDataGetCategoriesProvider).search;
+}
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
