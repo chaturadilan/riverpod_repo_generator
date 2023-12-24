@@ -47,5 +47,13 @@
 
 * Fixed the README codes
 
+## 1.0.12
+
+* Fixed the issue with versions
+
+## 1.0.13
+
+* Fixed the issue with dependencies versions
+
 
 
