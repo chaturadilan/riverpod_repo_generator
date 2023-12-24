@@ -55,5 +55,9 @@
 
 * Fixed the issue with dependencies versions
 
+## 1.0.14
+
+* Fixed the issue with dependencies versions
+
 
 
