@@ -1,7 +1,7 @@
 # Repo Generator with Riverpod
 
 ## Known Issue
-You have to use the exact version of riverpod_generator 2.3.3 in pubspec.yaml or below. 
+You have to use the exact version of riverpod_generator 2.3.3 or below in pubspec.yaml. 
 
 ```
 riverpod_generator: 2.3.3
