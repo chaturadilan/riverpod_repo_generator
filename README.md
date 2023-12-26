@@ -1,5 +1,13 @@
 # Repo Generator with Riverpod
 
+## Known Issue
+You have to use the exact version of riverpod_generator 2.3.3 in pubspec.yaml or below. 
+
+```
+riverpod_generator: 2.3.3
+
+```
+
 ## Getting Started
 
 This is a Flutter code generator to generate Riverpod Providers based on the Repository pattern.
@@ -15,6 +23,8 @@ In this pattern, the application interacts with a repository interface, which ac
 1. Create a abstract class (Interface for your repository)
 2. Add @riverpodRepo annotation to your interface class
 3. Add part directive for .g.dart and .repo.g.dart
+4. user riverpod_generator: 2.3.3 in your pubspec
+
 ```
 part 'data_repo.g.dart';
 part 'data_repo.repo.g.dart';
