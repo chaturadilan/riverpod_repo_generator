@@ -59,5 +59,10 @@
 
 * Fixed the issue with dependencies versions
 
+## 2.0.0
+
+* Rename .repo.g.dart to .repo.dart
+
+
 
 
