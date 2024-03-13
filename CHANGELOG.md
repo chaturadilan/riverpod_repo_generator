@@ -67,6 +67,10 @@
 
 * Fixed the issue with ordering
 
+## 2.0.2
+
+* Readme changes
+
 
 
 
