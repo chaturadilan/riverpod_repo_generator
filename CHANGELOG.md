@@ -63,6 +63,10 @@
 
 * Rename .repo.g.dart to .repo.dart
 
+## 2.0.1
+
+* Fixed the issue with ordering
+
 
 
 

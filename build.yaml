@@ -10,7 +10,7 @@ targets:
     builders:
       riverpod_repo:
         enabled: true
-
+       
 builders:
   riverpod_repo:
     import: "package:riverpod_repo/riverpod_repo.dart"
@@ -18,8 +18,5 @@ builders:
     build_extensions: { ".dart": [".repo.dart"] }
     auto_apply: dependents
     build_to:  source
-
-global_options:
-  riverpod_repo:
-    runs_before:
-      - riverpod_generator
+    runs_before: ['riverpod_generator']
+ 
