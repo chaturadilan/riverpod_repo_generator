@@ -15,6 +15,7 @@ In this pattern, the application interacts with a repository interface, which ac
 1. Create a abstract class (Interface for your repository)
 2. Add @riverpodRepo annotation to your interface class
 3. Add part directive for .g.dart and .repo.dart
+4. use riverpod_generator: any in your pubspec
 
 ```
 part 'data_repo.g.dart';
