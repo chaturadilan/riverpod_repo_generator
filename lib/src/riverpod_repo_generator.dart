@@ -48,9 +48,9 @@ class RiverPodRepoGenerator
 
       MethodElement element = visitor.methods.values.elementAt(i)["element"];
       String methodName = "${className.camelCase}${element.name.pascalCase}";
-      String signture = element.declaration.toString().replaceFirst(
-          "${element.name}(",
-          "${methodName.camelCase}(${methodName.pascalCase}Ref ref,");
+      String signture = element.declaration
+          .toString()
+          .replaceFirst("${element.name}(", "${methodName.camelCase}(Ref ref,");
 
       // write the class and method
       buffer.writeln(

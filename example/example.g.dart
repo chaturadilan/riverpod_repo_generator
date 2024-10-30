@@ -19,8 +19,10 @@ final repoDataProvider = Provider<RepoData>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef RepoDataRef = ProviderRef<RepoData>;
-String _$repoDataGetBooksHash() => r'444d465dcd9ca476a059f881703551aabc7dc1d2';
+String _$repoDataGetBooksHash() => r'182958aa760fbe82270407002e842c5a418a03a8';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -192,6 +194,8 @@ class RepoDataGetBooksProvider extends AutoDisposeFutureProvider<List<String>> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin RepoDataGetBooksRef on AutoDisposeFutureProviderRef<List<String>> {
   /// The parameter `search` of this provider.
   String get search;
@@ -212,7 +216,7 @@ class _RepoDataGetBooksProviderElement
 }
 
 String _$repoDataGetTopGenresHash() =>
-    r'b16ac50e969229685d19013c557c0f59ed7d4085';
+    r'6f80cfa1c140a9248504b31a6b3d991430d056ef';
 
 /// Repositroy: RepoData, Method: getTopGenres
 ///
@@ -231,9 +235,11 @@ final repoDataGetTopGenresProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef RepoDataGetTopGenresRef = AutoDisposeFutureProviderRef<List<int>>;
 String _$repoDataGetTopBooksByGenreHash() =>
-    r'4ee0efb8b4903ffc14e783c8c43e4567cdfc346c';
+    r'b7b71543c7c9f9815d5c23220f3ae42911db4ff2';
 
 /// Repositroy: RepoData, Method: getTopBooksByGenre
 ///
@@ -386,6 +392,8 @@ class RepoDataGetTopBooksByGenreProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin RepoDataGetTopBooksByGenreRef
     on AutoDisposeFutureProviderRef<List<bool>> {
   /// The parameter `genreId` of this provider.
@@ -407,7 +415,7 @@ class _RepoDataGetTopBooksByGenreProviderElement
 }
 
 String _$repoDataGetCategoriesHash() =>
-    r'1096c87ff6c36a10e742f31abd58623c2d029681';
+    r'8362c9e317287b4a18f4d56b4b829afa36b18d75';
 
 /// Repositroy: RepoData, Method: getCategories
 ///
@@ -541,6 +549,8 @@ class RepoDataGetCategoriesProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin RepoDataGetCategoriesRef on AutoDisposeFutureProviderRef<List<String>> {
   /// The parameter `search` of this provider.
   String get search;
@@ -555,4 +565,4 @@ class _RepoDataGetCategoriesProviderElement
   String get search => (origin as RepoDataGetCategoriesProvider).search;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

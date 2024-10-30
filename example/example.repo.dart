@@ -10,7 +10,7 @@ part of 'example.dart';
 ///
 /// Get the books
 @riverpod
-Future<List<String>> repoDataGetBooks(RepoDataGetBooksRef ref,
+Future<List<String>> repoDataGetBooks(Ref ref,
     {String search = '', String categoryId = ''}) {
   return ref.watch(repoDataProvider).getBooks(
         search: search,
@@ -23,7 +23,7 @@ Future<List<String>> repoDataGetBooks(RepoDataGetBooksRef ref,
 /// Get the top  genres
 @riverpod
 Future<List<int>> repoDataGetTopGenres(
-  RepoDataGetTopGenresRef ref,
+  Ref ref,
 ) {
   return ref.watch(repoDataProvider).getTopGenres();
 }
@@ -32,8 +32,7 @@ Future<List<int>> repoDataGetTopGenres(
 ///
 /// Get the top books by genre
 @riverpod
-Future<List<bool>> repoDataGetTopBooksByGenre(
-    RepoDataGetTopBooksByGenreRef ref, String genreId,
+Future<List<bool>> repoDataGetTopBooksByGenre(Ref ref, String genreId,
     {String search = ''}) {
   return ref.watch(repoDataProvider).getTopBooksByGenre(
         genreId,
@@ -44,8 +43,7 @@ Future<List<bool>> repoDataGetTopBooksByGenre(
 /// Repositroy: RepoData, Method: getCategories
 ///
 @riverpod
-Future<List<String>> repoDataGetCategories(RepoDataGetCategoriesRef ref,
-    {String search = ''}) {
+Future<List<String>> repoDataGetCategories(Ref ref, {String search = ''}) {
   return ref.watch(repoDataProvider).getCategories(
         search: search,
       );
