@@ -71,6 +71,10 @@
 
 * Readme changes
 
+## 3.1.0
+
+* Update Dependancies
+
 
 
 

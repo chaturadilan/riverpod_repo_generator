@@ -1,6 +1,6 @@
 name: riverpod_repo
 description: A Lib to build Riverpod providers based on the reposirory interfaces.
-version: 3.0.0
+version: 3.1.0
 homepage: https://dilan.me
 repository: https://github.com/chaturadilan/riverpod_repo_generator
 
@@ -11,10 +11,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  build: ^2.4.1
-  source_gen: ^1.5.0
+  build: ^2.4.2
+  source_gen: ^2.0.0
   recase: ^4.1.0
-  analyzer: ^6.7.0
+  analyzer: ^7.1.0
   riverpod: ^2.6.1
   riverpod_annotation: ^2.6.1
 
@@ -22,9 +22,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-  build_runner: ^2.4.13
+  build_runner: ^2.4.14
 
-  riverpod_generator: ^2.6.2
+  riverpod_generator: ^2.6.4
 
 # This package supports all platforms listed below.
 platforms:
