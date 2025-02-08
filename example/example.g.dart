@@ -6,7 +6,7 @@ part of 'example.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$repoDataHash() => r'5c6c9ce86fa43bc8b32ab0005438bf0ee9359beb';
+String _$repoDataHash() => r'f0f05cfe280d0e933f53eda3c4e2c5b091c6d0ae';
 
 /// See also [repoData].
 @ProviderFor(repoData)

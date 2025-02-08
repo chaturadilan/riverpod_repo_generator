@@ -75,6 +75,10 @@
 
 * Update Dependancies
 
+## 3.2.0
+
+* Update Dependancies
+
 
 
 
