@@ -48,17 +48,16 @@ class RiverPodRepoGenerator
 
       MethodElement element = visitor.methods.values.elementAt(i)["element"];
       String methodName = "${className.camelCase}${element.name.pascalCase}";
-      String signture = element.declaration
-          .toString()
-          .replaceFirst("${element.name}(", "${methodName.camelCase}(Ref ref,");
+      String signture = element.declaration.toString().replaceFirst(
+        "${element.name}(",
+        "${methodName.camelCase}(Ref ref,",
+      );
 
       // write the class and method
       buffer.writeln(
         "/// Repositroy: ${className.pascalCase}, Method: $methodNameCamelCase ",
       );
-      buffer.writeln(
-        "///",
-      );
+      buffer.writeln("///");
 
       //write the comments
       var comments = visitor.methods.values.elementAt(i)["comments"];
@@ -67,9 +66,7 @@ class RiverPodRepoGenerator
       }
 
       // writes the riverpod annotation
-      buffer.writeln(
-        "@riverpod",
-      );
+      buffer.writeln("@riverpod");
       buffer.writeln(
         "$signture {return ref.watch(${className.camelCase}Provider).$methodNameCamelCase($parameterString);}",
       );
