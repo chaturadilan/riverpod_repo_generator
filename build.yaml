@@ -10,6 +10,12 @@ targets:
     builders:
       riverpod_repo:
         enabled: true
+      riverpod_generator:riverpod_generator:
+        enabled: true
+        generate_for:
+          include:
+            - "**/*.dart"
+            - "**/*.repo.dart"
 
 builders:
   riverpod_repo:
@@ -20,4 +26,3 @@ builders:
     build_to: source
     runs_before:
       - "riverpod_generator:riverpod_generator"
-      - "source_gen:combining_builder"

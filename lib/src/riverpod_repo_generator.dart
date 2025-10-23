@@ -30,6 +30,20 @@ class RiverPodRepoGenerator
 
     final buffer = StringBuffer();
 
+    // Get the source file name for the part directive
+    final sourceFile =
+        buildStep.inputId.path.split('/').last.replaceAll('.dart', '');
+
+    // Write imports and part directive for standalone file
+    buffer.writeln("// GENERATED CODE - DO NOT MODIFY BY HAND");
+    buffer.writeln();
+    buffer.writeln(
+        "import 'package:riverpod_annotation/riverpod_annotation.dart';");
+    buffer.writeln("import '$sourceFile.dart';");
+    buffer.writeln();
+    buffer.writeln("part '$sourceFile.repo.g.dart';");
+    buffer.writeln();
+
     String className = visitor.className;
     for (int i = 0; i < visitor.methods.length; i++) {
       String methodNameCamelCase = visitor.methods.keys.elementAt(i).camelCase;

@@ -1,11 +1,16 @@
 // dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'example.dart';
-
 // **************************************************************************
 // RiverPodRepoGenerator
 // **************************************************************************
+
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'example.dart';
+
+part 'example.repo.g.dart';
 
 /// Repositroy: RepoData, Method: getBooks
 ///

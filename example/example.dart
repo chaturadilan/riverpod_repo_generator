@@ -2,7 +2,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_repo/annotations.dart';
 
 part 'example.g.dart';
-part 'example.repo.dart';
 
 @Riverpod(keepAlive: true)
 RepoData repoData(Ref ref) => RepoDataImpl();

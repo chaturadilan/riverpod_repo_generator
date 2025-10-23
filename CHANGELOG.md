@@ -84,5 +84,8 @@
 * Update Dependancies
 
 
+## 4.3.0
+
+* Fxied bugs related to reverpod genertor
 
 
