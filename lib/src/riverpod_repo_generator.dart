@@ -7,7 +7,7 @@
 
 import 'dart:core';
 
-import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:build/build.dart';
 import 'package:recase/recase.dart';
 import 'package:source_gen/source_gen.dart';
@@ -21,12 +21,12 @@ class RiverPodRepoGenerator
   /// Generate the annotated element
   @override
   String generateForAnnotatedElement(
-    Element element,
+    Element2 element,
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
     final visitor = ModelVisitor();
-    element.visitChildren(visitor);
+    element.visitChildren2(visitor);
 
     final buffer = StringBuffer();
 
@@ -34,24 +34,28 @@ class RiverPodRepoGenerator
     for (int i = 0; i < visitor.methods.length; i++) {
       String methodNameCamelCase = visitor.methods.keys.elementAt(i).camelCase;
 
-      List<ParameterElement> parameters =
+      List<FormalParameterElement> parameters =
           visitor.methods.values.elementAt(i)["parameters"];
       String parameterString = '';
 
       for (var parameter in parameters) {
-        if (parameter.isRequired) {
-          parameterString += "${parameter.name},";
-        } else if (parameter.isNamed) {
-          parameterString += "${parameter.name}: ${parameter.name},";
+        final paramName = parameter.name3;
+        if (paramName != null) {
+          if (parameter.isRequired) {
+            parameterString += "$paramName,";
+          } else if (parameter.isNamed) {
+            parameterString += "$paramName: $paramName,";
+          }
         }
       }
 
-      MethodElement element = visitor.methods.values.elementAt(i)["element"];
-      String methodName = "${className.camelCase}${element.name.pascalCase}";
-      String signture = element.declaration.toString().replaceFirst(
-        "${element.name}(",
-        "${methodName.camelCase}(Ref ref,",
-      );
+      MethodElement2 element = visitor.methods.values.elementAt(i)["element"];
+      final elementName = element.name3 ?? '';
+      String methodName = "${className.camelCase}${elementName.pascalCase}";
+      String signture = element.toString().replaceFirst(
+            "$elementName(",
+            "${methodName.camelCase}(Ref ref,",
+          );
 
       // write the class and method
       buffer.writeln(

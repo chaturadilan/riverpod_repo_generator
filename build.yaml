@@ -1,22 +1,23 @@
-# 
-#  Copyright 2023 Chatura Dilan Perera. All rights reserved. 
-#  Use of this source code is governed by license that can be 
+#
+#  Copyright 2023 Chatura Dilan Perera. All rights reserved.
+#  Use of this source code is governed by license that can be
 #  found in the LICENSE file.
 #  Created: 2023-03-21T00:07:15.704Z
-# 
+#
 
 targets:
   $default:
     builders:
       riverpod_repo:
         enabled: true
-       
+
 builders:
   riverpod_repo:
     import: "package:riverpod_repo/riverpod_repo.dart"
     builder_factories: ["generateRiverpodRepo"]
     build_extensions: { ".dart": [".repo.dart"] }
     auto_apply: dependents
-    build_to:  source
-    runs_before: ['riverpod_generator']
- 
+    build_to: source
+    runs_before:
+      - "riverpod_generator:riverpod_generator"
+      - "source_gen:combining_builder"
