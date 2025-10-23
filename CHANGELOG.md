@@ -88,4 +88,9 @@
 
 * Fxied bugs related to reverpod genertor
 
+## 4.4.0
+
+* Fxied bugs
+
+
 
