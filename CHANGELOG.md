@@ -92,5 +92,10 @@
 
 * Fxied bugs
 
+## 4.4.0
+
+* Fxied bug related to genrator
+
+
 
 

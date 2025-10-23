@@ -1,17 +1,18 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_repo/annotations.dart';
 
+import 'student.dart';
+
 part 'example.g.dart';
 
 @Riverpod(keepAlive: true)
 RepoData repoData(Ref ref) => RepoDataImpl();
 
 @riverpodRepo
-
 /// Repository class to get Data
 abstract class RepoData {
   /// Get the books
-  Future<List<String>> getBooks({String search = '', String categoryId = ''});
+  Future<List<Student>> getBooks({String search = '', String categoryId = ''});
 
   /// Get the top  genres
   Future<List<int>> getTopGenres();
@@ -26,7 +27,7 @@ abstract class RepoData {
 class RepoDataImpl implements RepoData {
   /// Implimentation of the getBooks method
   @override
-  Future<List<String>> getBooks({String search = '', String categoryId = ''}) {
+  Future<List<Student>> getBooks({String search = '', String categoryId = ''}) {
     throw UnimplementedError();
   }
 

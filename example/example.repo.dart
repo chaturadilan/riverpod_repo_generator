@@ -9,6 +9,9 @@
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'example.dart';
+import 'student.dart';
+
+export 'example.dart';
 
 part 'example.repo.g.dart';
 
@@ -16,7 +19,7 @@ part 'example.repo.g.dart';
 ///
 /// Get the books
 @riverpod
-Future<List<String>> repoDataGetBooks(
+Future<List<Student>> repoDataGetBooks(
   Ref ref, {
   String search = '',
   String categoryId = '',

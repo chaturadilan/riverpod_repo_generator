@@ -20,26 +20,50 @@ class RiverPodRepoGenerator
     extends GeneratorForAnnotation<RiverpodRepoAnnotation> {
   /// Generate the annotated element
   @override
-  String generateForAnnotatedElement(
+  Future<String> generateForAnnotatedElement(
     Element2 element,
     ConstantReader annotation,
     BuildStep buildStep,
-  ) {
+  ) async {
     final visitor = ModelVisitor();
     element.visitChildren2(visitor);
 
     final buffer = StringBuffer();
 
     // Get the source file name for the part directive
-    final sourceFile =
-        buildStep.inputId.path.split('/').last.replaceAll('.dart', '');
+    final sourceFile = buildStep.inputId.path
+        .split('/')
+        .last
+        .replaceAll('.dart', '');
+
+    // Read the source file to extract imports
+    final sourceContent = await buildStep.readAsString(buildStep.inputId);
+    final importLines = sourceContent
+        .split('\n')
+        .where(
+          (line) =>
+              line.trim().startsWith('import ') &&
+              !line.contains('package:riverpod_annotation') &&
+              !line.contains('package:riverpod_repo') &&
+              !line.contains('package:riverpod/'),
+        )
+        .toList();
 
     // Write imports and part directive for standalone file
     buffer.writeln("// GENERATED CODE - DO NOT MODIFY BY HAND");
     buffer.writeln();
     buffer.writeln(
-        "import 'package:riverpod_annotation/riverpod_annotation.dart';");
+      "import 'package:riverpod_annotation/riverpod_annotation.dart';",
+    );
     buffer.writeln("import '$sourceFile.dart';");
+
+    // Add all imports from source file
+    for (final importLine in importLines) {
+      buffer.writeln(importLine);
+    }
+
+    buffer.writeln();
+    buffer.writeln("export '$sourceFile.dart';");
     buffer.writeln();
     buffer.writeln("part '$sourceFile.repo.g.dart';");
     buffer.writeln();
@@ -48,8 +72,8 @@ class RiverPodRepoGenerator
     for (int i = 0; i < visitor.methods.length; i++) {
       String methodNameCamelCase = visitor.methods.keys.elementAt(i).camelCase;
 
-      List<FormalParameterElement> parameters =
-          visitor.methods.values.elementAt(i)["parameters"];
+      List<FormalParameterElement> parameters = visitor.methods.values
+          .elementAt(i)["parameters"];
       String parameterString = '';
 
       for (var parameter in parameters) {
@@ -67,9 +91,9 @@ class RiverPodRepoGenerator
       final elementName = element.name3 ?? '';
       String methodName = "${className.camelCase}${elementName.pascalCase}";
       String signture = element.toString().replaceFirst(
-            "$elementName(",
-            "${methodName.camelCase}(Ref ref,",
-          );
+        "$elementName(",
+        "${methodName.camelCase}(Ref ref,",
+      );
 
       // write the class and method
       buffer.writeln(

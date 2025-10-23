@@ -22,11 +22,11 @@ const repoDataGetBooksProvider = RepoDataGetBooksFamily._();
 final class RepoDataGetBooksProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<String>>,
-          List<String>,
-          FutureOr<List<String>>
+          AsyncValue<List<Student>>,
+          List<Student>,
+          FutureOr<List<Student>>
         >
-    with $FutureModifier<List<String>>, $FutureProvider<List<String>> {
+    with $FutureModifier<List<Student>>, $FutureProvider<List<Student>> {
   /// Repositroy: RepoData, Method: getBooks
   ///
   /// Get the books
@@ -53,12 +53,12 @@ final class RepoDataGetBooksProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<String>> $createElement(
+  $FutureProviderElement<List<Student>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<String>> create(Ref ref) {
+  FutureOr<List<Student>> create(Ref ref) {
     final argument = this.argument as ({String search, String categoryId});
     return repoDataGetBooks(
       ref,
@@ -78,7 +78,7 @@ final class RepoDataGetBooksProvider
   }
 }
 
-String _$repoDataGetBooksHash() => r'182958aa760fbe82270407002e842c5a418a03a8';
+String _$repoDataGetBooksHash() => r'2a52380b59102a6d197c49cd85341c9d18f49248';
 
 /// Repositroy: RepoData, Method: getBooks
 ///
@@ -87,7 +87,7 @@ String _$repoDataGetBooksHash() => r'182958aa760fbe82270407002e842c5a418a03a8';
 final class RepoDataGetBooksFamily extends $Family
     with
         $FunctionalFamilyOverride<
-          FutureOr<List<String>>,
+          FutureOr<List<Student>>,
           ({String search, String categoryId})
         > {
   const RepoDataGetBooksFamily._()
