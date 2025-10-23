@@ -54,6 +54,6 @@ Future<List<bool>> repoDataGetTopBooksByGenre(
 /// Repositroy: RepoData, Method: getCategories
 ///
 @riverpod
-Future<List<String>> repoDataGetCategories(Ref ref, {String search = ''}) {
+Future<List<Hello>> repoDataGetCategories(Ref ref, {String search = ''}) {
   return ref.watch(repoDataProvider).getCategories(search: search);
 }

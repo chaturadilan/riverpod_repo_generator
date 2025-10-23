@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_repo/annotations.dart';
 
+import 'country.dart';
 import 'student.dart';
 
 part 'example.g.dart';
@@ -20,7 +21,7 @@ abstract class RepoData {
   /// Get the top books by genre
   Future<List<bool>> getTopBooksByGenre(String genreId, {String search = ''});
 
-  Future<List<String>> getCategories({String search = ''});
+  Future<List<Hello>> getCategories({String search = ''});
 }
 
 /// Repository Implementation class to get Data
@@ -33,7 +34,7 @@ class RepoDataImpl implements RepoData {
 
   /// Implimentation of the getCategories method
   @override
-  Future<List<String>> getCategories({String search = ''}) {
+  Future<List<Hello>> getCategories({String search = ''}) {
     throw UnimplementedError();
   }
 
@@ -46,6 +47,7 @@ class RepoDataImpl implements RepoData {
   /// Implimentation of the getTopGenres method
   @override
   Future<List<int>> getTopGenres() {
+    Country country;
     throw UnimplementedError();
   }
 }

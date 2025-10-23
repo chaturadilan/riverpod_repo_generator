@@ -92,9 +92,13 @@
 
 * Fxied bugs
 
-## 4.4.0
+## 4.5.0
 
 * Fxied bug related to genrator
+
+## 4.6.0
+
+* Fxied bug related to generator
 
 
 

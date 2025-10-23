@@ -7,3 +7,13 @@ class Student {
     required this.name,
   });
 }
+
+class Hello {
+  final int id;
+  final String name;
+
+  Hello({
+    required this.id,
+    required this.name,
+  });
+}

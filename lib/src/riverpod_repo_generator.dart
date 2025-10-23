@@ -8,6 +8,7 @@
 import 'dart:core';
 
 import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:recase/recase.dart';
 import 'package:source_gen/source_gen.dart';
@@ -28,6 +29,24 @@ class RiverPodRepoGenerator
     final visitor = ModelVisitor();
     element.visitChildren2(visitor);
 
+    // Collect all types used in method signatures
+    final Set<String> requiredImports = {};
+    
+    for (var methodEntry in visitor.methods.values) {
+      final MethodElement2 methodElement = methodEntry["element"];
+      
+      // Add imports for return type
+      final returnType = methodElement.returnType;
+      _collectTypeImports(returnType, requiredImports, element);
+      
+      // Add imports for parameters
+      final List<FormalParameterElement> parameters = methodEntry["parameters"];
+      for (var param in parameters) {
+        final paramType = param.type;
+        _collectTypeImports(paramType, requiredImports, element);
+      }
+    }
+
     final buffer = StringBuffer();
 
     // Get the source file name for the part directive
@@ -36,19 +55,6 @@ class RiverPodRepoGenerator
         .last
         .replaceAll('.dart', '');
 
-    // Read the source file to extract imports
-    final sourceContent = await buildStep.readAsString(buildStep.inputId);
-    final importLines = sourceContent
-        .split('\n')
-        .where(
-          (line) =>
-              line.trim().startsWith('import ') &&
-              !line.contains('package:riverpod_annotation') &&
-              !line.contains('package:riverpod_repo') &&
-              !line.contains('package:riverpod/'),
-        )
-        .toList();
-
     // Write imports and part directive for standalone file
     buffer.writeln("// GENERATED CODE - DO NOT MODIFY BY HAND");
     buffer.writeln();
@@ -56,12 +62,13 @@ class RiverPodRepoGenerator
       "import 'package:riverpod_annotation/riverpod_annotation.dart';",
     );
     buffer.writeln("import '$sourceFile.dart';");
-
-    // Add all imports from source file
-    for (final importLine in importLines) {
-      buffer.writeln(importLine);
+    
+    // Only add imports that are actually used
+    for (var import in requiredImports) {
+      buffer.writeln("import '$import';");
     }
-
+    
+    // Export the original file
     buffer.writeln();
     buffer.writeln("export '$sourceFile.dart';");
     buffer.writeln();
@@ -115,5 +122,50 @@ class RiverPodRepoGenerator
     }
 
     return buffer.toString();
+  }
+  
+  /// Recursively collect imports needed for a type
+  void _collectTypeImports(
+    DartType type,
+    Set<String> imports,
+    Element2 sourceElement,
+  ) {
+    // Handle generic types (e.g., List<Student>, Map<String, dynamic>) FIRST
+    // This ensures we process type arguments even if the container type (List, etc.) is from dart:core
+    if (type is ParameterizedType) {
+      for (var typeArg in type.typeArguments) {
+        _collectTypeImports(typeArg, imports, sourceElement);
+      }
+    }
+    
+    // Now check if we need to import the type itself
+    final typeElement = type.element3;
+    if (typeElement == null) return;
+    
+    final library = typeElement.library2;
+    if (library == null) return;
+    
+    final librarySource = library.uri.toString();
+    
+    // Skip if it's from dart:core or the same library
+    if (librarySource.startsWith('dart:core') || 
+        library == sourceElement.library2) {
+      return;
+    }
+    
+    // Handle asset: URIs (local files in the same package)
+    if (librarySource.startsWith('asset:')) {
+      // Extract just the file name from asset:package_name/path/to/file.dart
+      final parts = librarySource.split('/');
+      if (parts.length > 1) {
+        imports.add(parts.last);
+      }
+      return;
+    }
+    
+    // Add package: imports
+    if (librarySource.startsWith('package:')) {
+      imports.add(librarySource);
+    }
   }
 }

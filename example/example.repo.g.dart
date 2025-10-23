@@ -283,11 +283,11 @@ const repoDataGetCategoriesProvider = RepoDataGetCategoriesFamily._();
 final class RepoDataGetCategoriesProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<String>>,
-          List<String>,
-          FutureOr<List<String>>
+          AsyncValue<List<Hello>>,
+          List<Hello>,
+          FutureOr<List<Hello>>
         >
-    with $FutureModifier<List<String>>, $FutureProvider<List<String>> {
+    with $FutureModifier<List<Hello>>, $FutureProvider<List<Hello>> {
   /// Repositroy: RepoData, Method: getCategories
   ///
   const RepoDataGetCategoriesProvider._({
@@ -313,12 +313,12 @@ final class RepoDataGetCategoriesProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<String>> $createElement(
+  $FutureProviderElement<List<Hello>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<String>> create(Ref ref) {
+  FutureOr<List<Hello>> create(Ref ref) {
     final argument = this.argument as String;
     return repoDataGetCategories(ref, search: argument);
   }
@@ -335,13 +335,13 @@ final class RepoDataGetCategoriesProvider
 }
 
 String _$repoDataGetCategoriesHash() =>
-    r'8362c9e317287b4a18f4d56b4b829afa36b18d75';
+    r'7a7130f784ed20a261fc047912b3cffa97856ba5';
 
 /// Repositroy: RepoData, Method: getCategories
 ///
 
 final class RepoDataGetCategoriesFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<List<String>>, String> {
+    with $FunctionalFamilyOverride<FutureOr<List<Hello>>, String> {
   const RepoDataGetCategoriesFamily._()
     : super(
         retry: null,
