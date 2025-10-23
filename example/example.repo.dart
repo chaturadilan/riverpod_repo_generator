@@ -16,21 +16,21 @@ part 'example.repo.g.dart';
 ///
 /// Get the books
 @riverpod
-Future<List<String>> repoDataGetBooks(Ref ref,
-    {String search = '', String categoryId = ''}) {
-  return ref.watch(repoDataProvider).getBooks(
-        search: search,
-        categoryId: categoryId,
-      );
+Future<List<String>> repoDataGetBooks(
+  Ref ref, {
+  String search = '',
+  String categoryId = '',
+}) {
+  return ref
+      .watch(repoDataProvider)
+      .getBooks(search: search, categoryId: categoryId);
 }
 
 /// Repositroy: RepoData, Method: getTopGenres
 ///
 /// Get the top  genres
 @riverpod
-Future<List<int>> repoDataGetTopGenres(
-  Ref ref,
-) {
+Future<List<int>> repoDataGetTopGenres(Ref ref) {
   return ref.watch(repoDataProvider).getTopGenres();
 }
 
@@ -38,19 +38,19 @@ Future<List<int>> repoDataGetTopGenres(
 ///
 /// Get the top books by genre
 @riverpod
-Future<List<bool>> repoDataGetTopBooksByGenre(Ref ref, String genreId,
-    {String search = ''}) {
-  return ref.watch(repoDataProvider).getTopBooksByGenre(
-        genreId,
-        search: search,
-      );
+Future<List<bool>> repoDataGetTopBooksByGenre(
+  Ref ref,
+  String genreId, {
+  String search = '',
+}) {
+  return ref
+      .watch(repoDataProvider)
+      .getTopBooksByGenre(genreId, search: search);
 }
 
 /// Repositroy: RepoData, Method: getCategories
 ///
 @riverpod
 Future<List<String>> repoDataGetCategories(Ref ref, {String search = ''}) {
-  return ref.watch(repoDataProvider).getCategories(
-        search: search,
-      );
+  return ref.watch(repoDataProvider).getCategories(search: search);
 }

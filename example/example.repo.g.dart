@@ -19,26 +19,27 @@ const repoDataGetBooksProvider = RepoDataGetBooksFamily._();
 ///
 /// Get the books
 
-final class RepoDataGetBooksProvider extends $FunctionalProvider<
-        AsyncValue<List<String>>, List<String>, FutureOr<List<String>>>
+final class RepoDataGetBooksProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<String>>,
+          List<String>,
+          FutureOr<List<String>>
+        >
     with $FutureModifier<List<String>>, $FutureProvider<List<String>> {
   /// Repositroy: RepoData, Method: getBooks
   ///
   /// Get the books
-  const RepoDataGetBooksProvider._(
-      {required RepoDataGetBooksFamily super.from,
-      required ({
-        String search,
-        String categoryId,
-      })
-          super.argument})
-      : super(
-          retry: null,
-          name: r'repoDataGetBooksProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const RepoDataGetBooksProvider._({
+    required RepoDataGetBooksFamily super.from,
+    required ({String search, String categoryId}) super.argument,
+  }) : super(
+         retry: null,
+         name: r'repoDataGetBooksProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$repoDataGetBooksHash();
@@ -53,15 +54,12 @@ final class RepoDataGetBooksProvider extends $FunctionalProvider<
   @$internal
   @override
   $FutureProviderElement<List<String>> $createElement(
-          $ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<String>> create(Ref ref) {
-    final argument = this.argument as ({
-      String search,
-      String categoryId,
-    });
+    final argument = this.argument as ({String search, String categoryId});
     return repoDataGetBooks(
       ref,
       search: argument.search,
@@ -89,32 +87,27 @@ String _$repoDataGetBooksHash() => r'182958aa760fbe82270407002e842c5a418a03a8';
 final class RepoDataGetBooksFamily extends $Family
     with
         $FunctionalFamilyOverride<
-            FutureOr<List<String>>,
-            ({
-              String search,
-              String categoryId,
-            })> {
+          FutureOr<List<String>>,
+          ({String search, String categoryId})
+        > {
   const RepoDataGetBooksFamily._()
-      : super(
-          retry: null,
-          name: r'repoDataGetBooksProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'repoDataGetBooksProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
   /// Repositroy: RepoData, Method: getBooks
   ///
   /// Get the books
 
-  RepoDataGetBooksProvider call({
-    String search = '',
-    String categoryId = '',
-  }) =>
-      RepoDataGetBooksProvider._(argument: (
-        search: search,
-        categoryId: categoryId,
-      ), from: this);
+  RepoDataGetBooksProvider call({String search = '', String categoryId = ''}) =>
+      RepoDataGetBooksProvider._(
+        argument: (search: search, categoryId: categoryId),
+        from: this,
+      );
 
   @override
   String toString() => r'repoDataGetBooksProvider';
@@ -131,22 +124,27 @@ const repoDataGetTopGenresProvider = RepoDataGetTopGenresProvider._();
 ///
 /// Get the top  genres
 
-final class RepoDataGetTopGenresProvider extends $FunctionalProvider<
-        AsyncValue<List<int>>, List<int>, FutureOr<List<int>>>
+final class RepoDataGetTopGenresProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<int>>,
+          List<int>,
+          FutureOr<List<int>>
+        >
     with $FutureModifier<List<int>>, $FutureProvider<List<int>> {
   /// Repositroy: RepoData, Method: getTopGenres
   ///
   /// Get the top  genres
   const RepoDataGetTopGenresProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'repoDataGetTopGenresProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'repoDataGetTopGenresProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$repoDataGetTopGenresHash();
@@ -176,26 +174,27 @@ const repoDataGetTopBooksByGenreProvider = RepoDataGetTopBooksByGenreFamily._();
 ///
 /// Get the top books by genre
 
-final class RepoDataGetTopBooksByGenreProvider extends $FunctionalProvider<
-        AsyncValue<List<bool>>, List<bool>, FutureOr<List<bool>>>
+final class RepoDataGetTopBooksByGenreProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<bool>>,
+          List<bool>,
+          FutureOr<List<bool>>
+        >
     with $FutureModifier<List<bool>>, $FutureProvider<List<bool>> {
   /// Repositroy: RepoData, Method: getTopBooksByGenre
   ///
   /// Get the top books by genre
-  const RepoDataGetTopBooksByGenreProvider._(
-      {required RepoDataGetTopBooksByGenreFamily super.from,
-      required (
-        String, {
-        String search,
-      })
-          super.argument})
-      : super(
-          retry: null,
-          name: r'repoDataGetTopBooksByGenreProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const RepoDataGetTopBooksByGenreProvider._({
+    required RepoDataGetTopBooksByGenreFamily super.from,
+    required (String, {String search}) super.argument,
+  }) : super(
+         retry: null,
+         name: r'repoDataGetTopBooksByGenreProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$repoDataGetTopBooksByGenreHash();
@@ -214,10 +213,7 @@ final class RepoDataGetTopBooksByGenreProvider extends $FunctionalProvider<
 
   @override
   FutureOr<List<bool>> create(Ref ref) {
-    final argument = this.argument as (
-      String, {
-      String search,
-    });
+    final argument = this.argument as (String, {String search});
     return repoDataGetTopBooksByGenre(
       ref,
       argument.$1,
@@ -247,19 +243,17 @@ String _$repoDataGetTopBooksByGenreHash() =>
 final class RepoDataGetTopBooksByGenreFamily extends $Family
     with
         $FunctionalFamilyOverride<
-            FutureOr<List<bool>>,
-            (
-              String, {
-              String search,
-            })> {
+          FutureOr<List<bool>>,
+          (String, {String search})
+        > {
   const RepoDataGetTopBooksByGenreFamily._()
-      : super(
-          retry: null,
-          name: r'repoDataGetTopBooksByGenreProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'repoDataGetTopBooksByGenreProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
   /// Repositroy: RepoData, Method: getTopBooksByGenre
   ///
@@ -268,11 +262,10 @@ final class RepoDataGetTopBooksByGenreFamily extends $Family
   RepoDataGetTopBooksByGenreProvider call(
     String genreId, {
     String search = '',
-  }) =>
-      RepoDataGetTopBooksByGenreProvider._(argument: (
-        genreId,
-        search: search,
-      ), from: this);
+  }) => RepoDataGetTopBooksByGenreProvider._(
+    argument: (genreId, search: search),
+    from: this,
+  );
 
   @override
   String toString() => r'repoDataGetTopBooksByGenreProvider';
@@ -287,21 +280,26 @@ const repoDataGetCategoriesProvider = RepoDataGetCategoriesFamily._();
 /// Repositroy: RepoData, Method: getCategories
 ///
 
-final class RepoDataGetCategoriesProvider extends $FunctionalProvider<
-        AsyncValue<List<String>>, List<String>, FutureOr<List<String>>>
+final class RepoDataGetCategoriesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<String>>,
+          List<String>,
+          FutureOr<List<String>>
+        >
     with $FutureModifier<List<String>>, $FutureProvider<List<String>> {
   /// Repositroy: RepoData, Method: getCategories
   ///
-  const RepoDataGetCategoriesProvider._(
-      {required RepoDataGetCategoriesFamily super.from,
-      required String super.argument})
-      : super(
-          retry: null,
-          name: r'repoDataGetCategoriesProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  const RepoDataGetCategoriesProvider._({
+    required RepoDataGetCategoriesFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'repoDataGetCategoriesProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$repoDataGetCategoriesHash();
@@ -316,16 +314,13 @@ final class RepoDataGetCategoriesProvider extends $FunctionalProvider<
   @$internal
   @override
   $FutureProviderElement<List<String>> $createElement(
-          $ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<String>> create(Ref ref) {
     final argument = this.argument as String;
-    return repoDataGetCategories(
-      ref,
-      search: argument,
-    );
+    return repoDataGetCategories(ref, search: argument);
   }
 
   @override
@@ -348,20 +343,18 @@ String _$repoDataGetCategoriesHash() =>
 final class RepoDataGetCategoriesFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<String>>, String> {
   const RepoDataGetCategoriesFamily._()
-      : super(
-          retry: null,
-          name: r'repoDataGetCategoriesProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'repoDataGetCategoriesProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
   /// Repositroy: RepoData, Method: getCategories
   ///
 
-  RepoDataGetCategoriesProvider call({
-    String search = '',
-  }) =>
+  RepoDataGetCategoriesProvider call({String search = ''}) =>
       RepoDataGetCategoriesProvider._(argument: search, from: this);
 
   @override

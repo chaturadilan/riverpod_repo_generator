@@ -5,8 +5,8 @@ homepage: https://dilan.me
 repository: https://github.com/chaturadilan/riverpod_repo_generator
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
-  flutter: ">=3.3.0"
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.35.0"
 
 topics:
   - riverpod
@@ -29,7 +29,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  build_runner: ^2.5.4
+  build_runner: ^2.7.1
   riverpod_generator: ^3.0.3
 
 # This package supports all platforms listed below.

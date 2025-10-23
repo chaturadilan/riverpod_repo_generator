@@ -16,15 +16,15 @@ final class RepoDataProvider
     extends $FunctionalProvider<RepoData, RepoData, RepoData>
     with $Provider<RepoData> {
   const RepoDataProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'repoDataProvider',
-          isAutoDispose: false,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'repoDataProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$repoDataHash();
