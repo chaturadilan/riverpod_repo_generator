@@ -100,6 +100,10 @@
 
 * Fxied bug related to generator
 
+## 4.7.0
+
+* Upgraded to latest versions
+
 
 
 
