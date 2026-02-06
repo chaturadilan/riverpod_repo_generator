@@ -31,14 +31,14 @@ class RiverPodRepoGenerator
 
     // Collect all types used in method signatures
     final Set<String> requiredImports = {};
-    
+
     for (var methodEntry in visitor.methods.values) {
       final MethodElement2 methodElement = methodEntry["element"];
-      
+
       // Add imports for return type
       final returnType = methodElement.returnType;
       _collectTypeImports(returnType, requiredImports, element);
-      
+
       // Add imports for parameters
       final List<FormalParameterElement> parameters = methodEntry["parameters"];
       for (var param in parameters) {
@@ -62,12 +62,12 @@ class RiverPodRepoGenerator
       "import 'package:riverpod_annotation/riverpod_annotation.dart';",
     );
     buffer.writeln("import '$sourceFile.dart';");
-    
+
     // Only add imports that are actually used
     for (var import in requiredImports) {
       buffer.writeln("import '$import';");
     }
-    
+
     // Export the original file
     buffer.writeln();
     buffer.writeln("export '$sourceFile.dart';");
@@ -123,7 +123,7 @@ class RiverPodRepoGenerator
 
     return buffer.toString();
   }
-  
+
   /// Recursively collect imports needed for a type
   void _collectTypeImports(
     DartType type,
@@ -137,22 +137,22 @@ class RiverPodRepoGenerator
         _collectTypeImports(typeArg, imports, sourceElement);
       }
     }
-    
+
     // Now check if we need to import the type itself
     final typeElement = type.element3;
     if (typeElement == null) return;
-    
+
     final library = typeElement.library2;
     if (library == null) return;
-    
+
     final librarySource = library.uri.toString();
-    
+
     // Skip if it's from dart:core or the same library
-    if (librarySource.startsWith('dart:core') || 
+    if (librarySource.startsWith('dart:core') ||
         library == sourceElement.library2) {
       return;
     }
-    
+
     // Handle asset: URIs (local files in the same package)
     if (librarySource.startsWith('asset:')) {
       // Extract just the file name from asset:package_name/path/to/file.dart
@@ -162,7 +162,7 @@ class RiverPodRepoGenerator
       }
       return;
     }
-    
+
     // Add package: imports
     if (librarySource.startsWith('package:')) {
       imports.add(librarySource);
