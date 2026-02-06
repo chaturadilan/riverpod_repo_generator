@@ -10,12 +10,12 @@ part of 'example.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(repoData)
-const repoDataProvider = RepoDataProvider._();
+final repoDataProvider = RepoDataProvider._();
 
 final class RepoDataProvider
     extends $FunctionalProvider<RepoData, RepoData, RepoData>
     with $Provider<RepoData> {
-  const RepoDataProvider._()
+  RepoDataProvider._()
     : super(
         from: null,
         argument: null,

@@ -7,7 +7,7 @@
 
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/visitor2.dart';
 
 /// ModelVisitor class of the Riverpod Repo
@@ -18,7 +18,7 @@ class ModelVisitor extends RecursiveElementVisitor2<void> {
 
   /// Create the visit constructor element
   @override
-  void visitConstructorElement(ConstructorElement2 element) {
+  void visitConstructorElement(ConstructorElement element) {
     final returnType = element.returnType.toString();
     className = returnType.replaceFirst('*', '');
     super.visitConstructorElement(element);
@@ -26,8 +26,8 @@ class ModelVisitor extends RecursiveElementVisitor2<void> {
 
   /// Create the visit field element
   @override
-  void visitFieldElement(FieldElement2 element) {
-    final fieldName = element.name3;
+  void visitFieldElement(FieldElement element) {
+    final fieldName = element.name;
     if (fieldName != null) {
       fields[fieldName] = element.type.toString().replaceFirst('*', '');
     }
@@ -36,14 +36,14 @@ class ModelVisitor extends RecursiveElementVisitor2<void> {
 
   /// Create the visit method element
   @override
-  void visitMethodElement(MethodElement2 element) {
-    final methodName = element.name3;
+  void visitMethodElement(MethodElement element) {
+    final methodName = element.name;
     if (methodName != null) {
       methods[methodName] = {
         'comments': element.documentationComment,
         'element': element,
         "returnType": element.returnType,
-        "parameters": element.formalParameters
+        "parameters": element.formalParameters,
       };
     }
     super.visitMethodElement(element);

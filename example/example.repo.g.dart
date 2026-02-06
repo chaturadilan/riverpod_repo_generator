@@ -13,7 +13,7 @@ part of 'example.repo.dart';
 /// Get the books
 
 @ProviderFor(repoDataGetBooks)
-const repoDataGetBooksProvider = RepoDataGetBooksFamily._();
+final repoDataGetBooksProvider = RepoDataGetBooksFamily._();
 
 /// Repositroy: RepoData, Method: getBooks
 ///
@@ -30,7 +30,7 @@ final class RepoDataGetBooksProvider
   /// Repositroy: RepoData, Method: getBooks
   ///
   /// Get the books
-  const RepoDataGetBooksProvider._({
+  RepoDataGetBooksProvider._({
     required RepoDataGetBooksFamily super.from,
     required ({String search, String categoryId}) super.argument,
   }) : super(
@@ -90,7 +90,7 @@ final class RepoDataGetBooksFamily extends $Family
           FutureOr<List<Student>>,
           ({String search, String categoryId})
         > {
-  const RepoDataGetBooksFamily._()
+  RepoDataGetBooksFamily._()
     : super(
         retry: null,
         name: r'repoDataGetBooksProvider',
@@ -118,7 +118,7 @@ final class RepoDataGetBooksFamily extends $Family
 /// Get the top  genres
 
 @ProviderFor(repoDataGetTopGenres)
-const repoDataGetTopGenresProvider = RepoDataGetTopGenresProvider._();
+final repoDataGetTopGenresProvider = RepoDataGetTopGenresProvider._();
 
 /// Repositroy: RepoData, Method: getTopGenres
 ///
@@ -135,7 +135,7 @@ final class RepoDataGetTopGenresProvider
   /// Repositroy: RepoData, Method: getTopGenres
   ///
   /// Get the top  genres
-  const RepoDataGetTopGenresProvider._()
+  RepoDataGetTopGenresProvider._()
     : super(
         from: null,
         argument: null,
@@ -168,7 +168,7 @@ String _$repoDataGetTopGenresHash() =>
 /// Get the top books by genre
 
 @ProviderFor(repoDataGetTopBooksByGenre)
-const repoDataGetTopBooksByGenreProvider = RepoDataGetTopBooksByGenreFamily._();
+final repoDataGetTopBooksByGenreProvider = RepoDataGetTopBooksByGenreFamily._();
 
 /// Repositroy: RepoData, Method: getTopBooksByGenre
 ///
@@ -185,7 +185,7 @@ final class RepoDataGetTopBooksByGenreProvider
   /// Repositroy: RepoData, Method: getTopBooksByGenre
   ///
   /// Get the top books by genre
-  const RepoDataGetTopBooksByGenreProvider._({
+  RepoDataGetTopBooksByGenreProvider._({
     required RepoDataGetTopBooksByGenreFamily super.from,
     required (String, {String search}) super.argument,
   }) : super(
@@ -246,7 +246,7 @@ final class RepoDataGetTopBooksByGenreFamily extends $Family
           FutureOr<List<bool>>,
           (String, {String search})
         > {
-  const RepoDataGetTopBooksByGenreFamily._()
+  RepoDataGetTopBooksByGenreFamily._()
     : super(
         retry: null,
         name: r'repoDataGetTopBooksByGenreProvider',
@@ -275,7 +275,7 @@ final class RepoDataGetTopBooksByGenreFamily extends $Family
 ///
 
 @ProviderFor(repoDataGetCategories)
-const repoDataGetCategoriesProvider = RepoDataGetCategoriesFamily._();
+final repoDataGetCategoriesProvider = RepoDataGetCategoriesFamily._();
 
 /// Repositroy: RepoData, Method: getCategories
 ///
@@ -290,7 +290,7 @@ final class RepoDataGetCategoriesProvider
     with $FutureModifier<List<Hello>>, $FutureProvider<List<Hello>> {
   /// Repositroy: RepoData, Method: getCategories
   ///
-  const RepoDataGetCategoriesProvider._({
+  RepoDataGetCategoriesProvider._({
     required RepoDataGetCategoriesFamily super.from,
     required String super.argument,
   }) : super(
@@ -342,7 +342,7 @@ String _$repoDataGetCategoriesHash() =>
 
 final class RepoDataGetCategoriesFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<Hello>>, String> {
-  const RepoDataGetCategoriesFamily._()
+  RepoDataGetCategoriesFamily._()
     : super(
         retry: null,
         name: r'repoDataGetCategoriesProvider',

@@ -7,7 +7,7 @@
 
 import 'dart:core';
 
-import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:recase/recase.dart';
@@ -22,18 +22,18 @@ class RiverPodRepoGenerator
   /// Generate the annotated element
   @override
   Future<String> generateForAnnotatedElement(
-    Element2 element,
+    Element element,
     ConstantReader annotation,
     BuildStep buildStep,
   ) async {
     final visitor = ModelVisitor();
-    element.visitChildren2(visitor);
+    element.visitChildren(visitor);
 
     // Collect all types used in method signatures
     final Set<String> requiredImports = {};
 
     for (var methodEntry in visitor.methods.values) {
-      final MethodElement2 methodElement = methodEntry["element"];
+      final MethodElement methodElement = methodEntry["element"];
 
       // Add imports for return type
       final returnType = methodElement.returnType;
@@ -84,7 +84,7 @@ class RiverPodRepoGenerator
       String parameterString = '';
 
       for (var parameter in parameters) {
-        final paramName = parameter.name3;
+        final paramName = parameter.name;
         if (paramName != null) {
           if (parameter.isRequired) {
             parameterString += "$paramName,";
@@ -94,8 +94,8 @@ class RiverPodRepoGenerator
         }
       }
 
-      MethodElement2 element = visitor.methods.values.elementAt(i)["element"];
-      final elementName = element.name3 ?? '';
+      MethodElement element = visitor.methods.values.elementAt(i)["element"];
+      final elementName = element.name ?? '';
       String methodName = "${className.camelCase}${elementName.pascalCase}";
       String signture = element.toString().replaceFirst(
         "$elementName(",
@@ -128,7 +128,7 @@ class RiverPodRepoGenerator
   void _collectTypeImports(
     DartType type,
     Set<String> imports,
-    Element2 sourceElement,
+    Element sourceElement,
   ) {
     // Handle generic types (e.g., List<Student>, Map<String, dynamic>) FIRST
     // This ensures we process type arguments even if the container type (List, etc.) is from dart:core
@@ -139,17 +139,17 @@ class RiverPodRepoGenerator
     }
 
     // Now check if we need to import the type itself
-    final typeElement = type.element3;
+    final typeElement = type.element;
     if (typeElement == null) return;
 
-    final library = typeElement.library2;
+    final library = typeElement.library;
     if (library == null) return;
 
     final librarySource = library.uri.toString();
 
     // Skip if it's from dart:core or the same library
     if (librarySource.startsWith('dart:core') ||
-        library == sourceElement.library2) {
+        library == sourceElement.library) {
       return;
     }
 
