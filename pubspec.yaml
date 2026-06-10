@@ -1,6 +1,6 @@
 name: riverpod_repo
 description: A Lib to build Riverpod providers based on the reposirory interfaces.
-version: 4.8.0
+version: 5.0.0
 homepage: https://dilan.me
 repository: https://github.com/chaturadilan/riverpod_repo_generator
 
@@ -21,7 +21,7 @@ dependencies:
   build: ^4.0.6
   source_gen: ^4.2.3
   recase: ^4.1.0
-  analyzer: ^9.0.0
+  analyzer: ">=9.0.0 <14.0.0"
   riverpod: ^3.2.1
   riverpod_annotation: ^4.0.2
 

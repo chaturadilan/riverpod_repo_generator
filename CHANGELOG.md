@@ -110,6 +110,25 @@
 * Regenerated example output and added a `getCountry` method to demonstrate custom model import generation
 * Cleaned up the example to pass static analysis with no issues
 
+## 5.0.0
+
+* **Breaking:** The generator now emits a single self-contained `*.repo.g.dart`
+  library instead of the previous `*.repo.dart` + `*.repo.g.dart` pair.
+* **Breaking:** Repository providers are now built on the public Riverpod API
+  (`FutureProvider`/`StreamProvider`/`Provider` with `.autoDispose`/`.family`),
+  so they no longer depend on `riverpod_generator` to be processed.
+* **Breaking:** Methods with parameters now expose a `.family` keyed by the
+  method's arguments. A single positional argument is passed directly; methods
+  with named or multiple parameters are keyed by a Dart record
+  (e.g. `provider((search: 'flutter'))`).
+* The provider type is inferred from the return type: `Future<T>` →
+  `FutureProvider`, `Stream<T>` → `StreamProvider`, otherwise `Provider`.
+* Remove the `part '*.repo.dart';` directive from your source files when
+  migrating; just import the generated `*.repo.g.dart` file instead.
+* Widened the `analyzer` constraint to `>=9.0.0 <14.0.0` to track the latest
+  analyzer supported by `build`/`source_gen`, and formatted the package so it
+  passes `dart analyze`/`dart format` with no issues.
+
 
 
 

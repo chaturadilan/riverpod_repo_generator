@@ -16,7 +16,16 @@ import 'package:source_gen/source_gen.dart';
 import '../annotations.dart';
 import 'model_visitor.dart';
 
+/// The kind of Riverpod provider that maps to a repository method.
+enum _ProviderKind { future, stream, sync }
+
 /// RiverPodRepoGenerator class of the Riverpod Repo
+///
+/// Generates a single, self-contained Dart library that exposes one Riverpod
+/// provider per repository method. The output relies solely on the public
+/// Riverpod API (`FutureProvider`, `StreamProvider`, `Provider` and their
+/// `.autoDispose`/`.family` builders), so no secondary `riverpod_generator`
+/// step (and therefore no extra `*.g.dart` part file) is required.
 class RiverPodRepoGenerator
     extends GeneratorForAnnotation<RiverpodRepoAnnotation> {
   /// Generate the annotated element
@@ -29,99 +38,167 @@ class RiverPodRepoGenerator
     final visitor = ModelVisitor();
     element.visitChildren(visitor);
 
-    // Collect all types used in method signatures
+    // Collect all types used in method signatures so the generated library
+    // can import the models it references.
     final Set<String> requiredImports = {};
 
     for (var methodEntry in visitor.methods.values) {
       final MethodElement methodElement = methodEntry["element"];
 
-      // Add imports for return type
-      final returnType = methodElement.returnType;
-      _collectTypeImports(returnType, requiredImports, element);
+      _collectTypeImports(methodElement.returnType, requiredImports, element);
 
-      // Add imports for parameters
       final List<FormalParameterElement> parameters = methodEntry["parameters"];
       for (var param in parameters) {
-        final paramType = param.type;
-        _collectTypeImports(paramType, requiredImports, element);
+        _collectTypeImports(param.type, requiredImports, element);
       }
     }
 
     final buffer = StringBuffer();
 
-    // Get the source file name for the part directive
     final sourceFile = buildStep.inputId.path
         .split('/')
         .last
         .replaceAll('.dart', '');
 
-    // Write imports and part directive for standalone file
-    buffer.writeln("// GENERATED CODE - DO NOT MODIFY BY HAND");
+    buffer.writeln("// ignore_for_file: type=lint, type=warning");
     buffer.writeln();
-    buffer.writeln(
-      "import 'package:riverpod_annotation/riverpod_annotation.dart';",
-    );
+    buffer.writeln("import 'package:riverpod/riverpod.dart';");
     buffer.writeln("import '$sourceFile.dart';");
 
-    // Only add imports that are actually used
     for (var import in requiredImports) {
       buffer.writeln("import '$import';");
     }
 
-    // Export the original file
     buffer.writeln();
     buffer.writeln("export '$sourceFile.dart';");
     buffer.writeln();
-    buffer.writeln("part '$sourceFile.repo.g.dart';");
-    buffer.writeln();
 
-    String className = visitor.className;
-    for (int i = 0; i < visitor.methods.length; i++) {
-      String methodNameCamelCase = visitor.methods.keys.elementAt(i).camelCase;
+    final className = visitor.className;
+    final repoProvider = "${className.camelCase}Provider";
 
-      List<FormalParameterElement> parameters = visitor.methods.values
-          .elementAt(i)["parameters"];
-      String parameterString = '';
+    for (var methodEntry in visitor.methods.values) {
+      final MethodElement methodElement = methodEntry["element"];
+      final methodName = methodElement.name ?? '';
+      if (methodName.isEmpty) continue;
 
-      for (var parameter in parameters) {
-        final paramName = parameter.name;
-        if (paramName != null) {
-          if (parameter.isRequired) {
-            parameterString += "$paramName,";
-          } else if (parameter.isNamed) {
-            parameterString += "$paramName: $paramName,";
-          }
-        }
-      }
+      final providerName = "${className.camelCase}${methodName.pascalCase}";
 
-      MethodElement element = visitor.methods.values.elementAt(i)["element"];
-      final elementName = element.name ?? '';
-      String methodName = "${className.camelCase}${elementName.pascalCase}";
-      String signture = element.toString().replaceFirst(
-        "$elementName(",
-        "${methodName.camelCase}(Ref ref,",
-      );
+      final List<FormalParameterElement> parameters = methodEntry["parameters"];
+      final positional = parameters
+          .where((p) => p.isPositional)
+          .toList(growable: false);
+      final named = parameters.where((p) => p.isNamed).toList(growable: false);
 
-      // write the class and method
+      final kind = _providerKind(methodElement.returnType);
+      final valueType = _valueType(methodElement.returnType, kind);
+      final providerBase = switch (kind) {
+        _ProviderKind.future => 'FutureProvider',
+        _ProviderKind.stream => 'StreamProvider',
+        _ProviderKind.sync => 'Provider',
+      };
+
+      // Documentation header for the generated provider.
       buffer.writeln(
-        "/// Repositroy: ${className.pascalCase}, Method: $methodNameCamelCase ",
+        "/// Repository: ${className.pascalCase}, Method: ${methodName.camelCase}",
       );
       buffer.writeln("///");
-
-      //write the comments
-      var comments = visitor.methods.values.elementAt(i)["comments"];
+      final comments = methodEntry["comments"];
       if (comments != null) {
         buffer.writeln(comments);
       }
 
-      // writes the riverpod annotation
-      buffer.writeln("@riverpod");
-      buffer.writeln(
-        "$signture {return ref.watch(${className.camelCase}Provider).$methodNameCamelCase($parameterString);}",
-      );
+      if (parameters.isEmpty) {
+        buffer.writeln(
+          "final ${providerName}Provider = $providerBase.autoDispose<$valueType>((ref) {",
+        );
+        buffer.writeln("  return ref.watch($repoProvider).$methodName();");
+        buffer.writeln("});");
+      } else if (positional.length == 1 && named.isEmpty) {
+        final param = positional.first;
+        final argName = param.name ?? 'arg';
+        final argType = param.type.getDisplayString();
+        buffer.writeln(
+          "final ${providerName}Provider = $providerBase.autoDispose"
+          ".family<$valueType, $argType>((ref, $argName) {",
+        );
+        buffer.writeln(
+          "  return ref.watch($repoProvider).$methodName($argName);",
+        );
+        buffer.writeln("});");
+      } else {
+        final argType = _recordType(positional, named);
+        final invocation = _recordInvocation(positional, named);
+        buffer.writeln(
+          "final ${providerName}Provider = $providerBase.autoDispose"
+          ".family<$valueType, $argType>((ref, arg) {",
+        );
+        buffer.writeln(
+          "  return ref.watch($repoProvider).$methodName($invocation);",
+        );
+        buffer.writeln("});");
+      }
+
+      buffer.writeln();
     }
 
     return buffer.toString();
+  }
+
+  /// Determine which provider type maps to the given return [type].
+  _ProviderKind _providerKind(DartType type) {
+    if (type.isDartAsyncFuture || type.isDartAsyncFutureOr) {
+      return _ProviderKind.future;
+    }
+    if (type.isDartAsyncStream) {
+      return _ProviderKind.stream;
+    }
+    return _ProviderKind.sync;
+  }
+
+  /// The value exposed by the provider (unwrapping `Future`/`Stream`).
+  String _valueType(DartType type, _ProviderKind kind) {
+    if (kind != _ProviderKind.sync &&
+        type is ParameterizedType &&
+        type.typeArguments.isNotEmpty) {
+      return type.typeArguments.first.getDisplayString();
+    }
+    return type.getDisplayString();
+  }
+
+  /// Build the Dart record type used as the family argument.
+  String _recordType(
+    List<FormalParameterElement> positional,
+    List<FormalParameterElement> named,
+  ) {
+    final positionalTypes = positional
+        .map((p) => p.type.getDisplayString())
+        .join(', ');
+    final namedFields = named
+        .map((p) => '${p.type.getDisplayString()} ${p.name}')
+        .join(', ');
+
+    if (positional.isNotEmpty && named.isNotEmpty) {
+      return '($positionalTypes, {$namedFields})';
+    }
+    if (positional.isNotEmpty) {
+      return '($positionalTypes)';
+    }
+    return '({$namedFields})';
+  }
+
+  /// Build the argument list that forwards a record to the repository method.
+  String _recordInvocation(
+    List<FormalParameterElement> positional,
+    List<FormalParameterElement> named,
+  ) {
+    final parts = <String>[];
+    for (var i = 0; i < positional.length; i++) {
+      parts.add('arg.\$${i + 1}');
+    }
+    for (final p in named) {
+      parts.add('${p.name}: arg.${p.name}');
+    }
+    return parts.join(', ');
   }
 
   /// Recursively collect imports needed for a type

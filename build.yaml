@@ -10,19 +10,21 @@ targets:
     builders:
       riverpod_repo:
         enabled: true
+        generate_for:
+          exclude:
+            - "**/*.repo.g.dart"
       riverpod_generator:riverpod_generator:
         enabled: true
         generate_for:
           include:
             - "**/*.dart"
-            - "**/*.repo.dart"
+          exclude:
+            - "**/*.repo.g.dart"
 
 builders:
   riverpod_repo:
     import: "package:riverpod_repo/riverpod_repo.dart"
     builder_factories: ["generateRiverpodRepo"]
-    build_extensions: { ".dart": [".repo.dart"] }
+    build_extensions: { ".dart": [".repo.g.dart"] }
     auto_apply: dependents
     build_to: source
-    runs_before:
-      - "riverpod_generator:riverpod_generator"
