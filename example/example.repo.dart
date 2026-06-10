@@ -10,6 +10,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'example.dart';
 import 'student.dart';
+import 'country.dart';
 
 export 'example.dart';
 
@@ -56,4 +57,12 @@ Future<List<bool>> repoDataGetTopBooksByGenre(
 @riverpod
 Future<List<Hello>> repoDataGetCategories(Ref ref, {String search = ''}) {
   return ref.watch(repoDataProvider).getCategories(search: search);
+}
+
+/// Repositroy: RepoData, Method: getCountry
+///
+/// Get the country by code
+@riverpod
+Future<Country> repoDataGetCountry(Ref ref, String code) {
+  return ref.watch(repoDataProvider).getCountry(code);
 }

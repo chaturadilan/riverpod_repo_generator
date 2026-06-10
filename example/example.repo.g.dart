@@ -360,3 +360,92 @@ final class RepoDataGetCategoriesFamily extends $Family
   @override
   String toString() => r'repoDataGetCategoriesProvider';
 }
+
+/// Repositroy: RepoData, Method: getCountry
+///
+/// Get the country by code
+
+@ProviderFor(repoDataGetCountry)
+final repoDataGetCountryProvider = RepoDataGetCountryFamily._();
+
+/// Repositroy: RepoData, Method: getCountry
+///
+/// Get the country by code
+
+final class RepoDataGetCountryProvider
+    extends $FunctionalProvider<AsyncValue<Country>, Country, FutureOr<Country>>
+    with $FutureModifier<Country>, $FutureProvider<Country> {
+  /// Repositroy: RepoData, Method: getCountry
+  ///
+  /// Get the country by code
+  RepoDataGetCountryProvider._({
+    required RepoDataGetCountryFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'repoDataGetCountryProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$repoDataGetCountryHash();
+
+  @override
+  String toString() {
+    return r'repoDataGetCountryProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<Country> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Country> create(Ref ref) {
+    final argument = this.argument as String;
+    return repoDataGetCountry(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is RepoDataGetCountryProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$repoDataGetCountryHash() =>
+    r'cdda47b24c051ebd4d373bcd0e96c716fbd97aa2';
+
+/// Repositroy: RepoData, Method: getCountry
+///
+/// Get the country by code
+
+final class RepoDataGetCountryFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<Country>, String> {
+  RepoDataGetCountryFamily._()
+    : super(
+        retry: null,
+        name: r'repoDataGetCountryProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Repositroy: RepoData, Method: getCountry
+  ///
+  /// Get the country by code
+
+  RepoDataGetCountryProvider call(String code) =>
+      RepoDataGetCountryProvider._(argument: code, from: this);
+
+  @override
+  String toString() => r'repoDataGetCountryProvider';
+}

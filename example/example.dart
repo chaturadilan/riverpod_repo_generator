@@ -22,6 +22,9 @@ abstract class RepoData {
   Future<List<bool>> getTopBooksByGenre(String genreId, {String search = ''});
 
   Future<List<Hello>> getCategories({String search = ''});
+
+  /// Get the country by code
+  Future<Country> getCountry(String code);
 }
 
 /// Repository Implementation class to get Data
@@ -47,7 +50,12 @@ class RepoDataImpl implements RepoData {
   /// Implimentation of the getTopGenres method
   @override
   Future<List<int>> getTopGenres() {
-    Country country;
+    throw UnimplementedError();
+  }
+
+  /// Implimentation of the getCountry method
+  @override
+  Future<Country> getCountry(String code) {
     throw UnimplementedError();
   }
 }

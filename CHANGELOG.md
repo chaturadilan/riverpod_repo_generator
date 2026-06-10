@@ -104,6 +104,12 @@
 
 * Upgraded to latest versions
 
+## 4.8.0
+
+* Upgraded dependencies to the latest versions (analyzer 9, riverpod 3.2, source_gen 4.2, build 4.0.6, build_runner 2.15, riverpod_generator 4.0.3)
+* Regenerated example output and added a `getCountry` method to demonstrate custom model import generation
+* Cleaned up the example to pass static analysis with no issues
+
 
 
 
