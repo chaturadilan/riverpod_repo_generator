@@ -110,6 +110,12 @@
 * Regenerated example output and added a `getCountry` method to demonstrate custom model import generation
 * Cleaned up the example to pass static analysis with no issues
 
+## 5.1.1
+
+* Expand README with full setup guide, generated output samples, annotations
+  reference, mutation workflow, migration notes, and `build.yaml` configuration.
+* Add `example/README.md` documenting the sample repository and generated providers.
+
 ## 5.1.0
 
 * Skip provider generation for repository mutations: `Future<void>` /

@@ -3,104 +3,304 @@
 [![pub package](https://img.shields.io/pub/v/riverpod_repo.svg)](https://pub.dev/packages/riverpod_repo)
 
 A build-time code generator that creates Riverpod providers from repository
-interfaces. Each repository query method becomes a `FutureProvider`,
-`StreamProvider`, or `Provider` (with optional `.family` and `.autoDispose`).
+interfaces. Each **query** method on your repository becomes a `FutureProvider`,
+`StreamProvider`, or `Provider` — with optional `.family` and `.autoDispose`.
 
-## Getting started
+**Mutations are never turned into providers** (see [Mutations vs queries](#mutations-vs-queries)).
 
-Add `riverpod_repo` to `dev_dependencies` and enable the builder in your app's
-`build.yaml` (or rely on `auto_apply: dependents`).
+## Table of contents
+
+- [Installation](#installation)
+- [Quick start](#quick-start)
+- [Generated output](#generated-output)
+- [Using providers in the UI](#using-providers-in-the-ui)
+- [Mutations vs queries](#mutations-vs-queries)
+- [Keep-alive vs auto-dispose](#keep-alive-vs-auto-dispose)
+- [Annotations reference](#annotations-reference)
+- [Provider naming rules](#provider-naming-rules)
+- [Migration](#migration)
+- [Example project](#example-project)
+
+## Installation
+
+Add to **`dev_dependencies`** (this is a code generator, not a runtime dependency):
 
 ```yaml
 dev_dependencies:
-  riverpod_repo: ^5.1.0
+  riverpod_repo: ^5.1.1
   build_runner: ^2.15.0
   riverpod_annotation: ^4.0.2
   riverpod_generator: ^4.0.3
 ```
 
-### Setup
+Your app still needs **`riverpod`** (or `flutter_riverpod`) at runtime.
 
-1. Define an abstract repository interface.
-2. Annotate it with `@riverpodRepo` (or `@RiverpodRepoAnnotation(...)`).
-3. Add a `part` for your hand-written `@Riverpod` provider (`*.g.dart`).
-4. Run `dart run build_runner build`.
-5. Import the generated `*.repo.g.dart` file where you need the providers.
+The builder is applied automatically to packages that depend on `riverpod_repo`
+(`auto_apply: dependents`). To customize exclusions, add a `build.yaml`:
+
+```yaml
+targets:
+  $default:
+    builders:
+      riverpod_repo:
+        enabled: true
+        generate_for:
+          exclude:
+            - "**/*.repo.g.dart"
+```
+
+Run code generation:
+
+```bash
+dart run build_runner build
+```
+
+## Quick start
+
+### 1. Define the repository
 
 ```dart
-part 'data_repo.g.dart';
+// lib/data/book_repo.dart
+
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:riverpod_repo/riverpod_repo.dart';
+
+part 'book_repo.g.dart';
 
 @Riverpod(keepAlive: true)
-RepoData repoData(Ref ref) => RepoDataImpl();
+BookRepo bookRepo(Ref ref) => BookRepoImpl();
 
 @riverpodRepo
-abstract class RepoData {
+abstract class BookRepo {
   Future<List<Book>> getBooks({String search = ''});
-  Future<void> deleteBook(String id); // mutations are skipped
+  Future<Book> getBook(String id);
+  Future<void> deleteBook(String id); // mutation — no provider generated
 }
 ```
 
-The generator writes a standalone `data_repo.repo.g.dart` library. Starting
-with **5.0.0**, repository providers use the public Riverpod API directly and
-are **not** processed by `riverpod_generator`.
+Import annotations from either:
 
-## Mutations vs queries (5.1.0)
+- `package:riverpod_repo/riverpod_repo.dart` (recommended), or
+- `package:riverpod_repo/annotations.dart`
 
-Providers are generated only for **reads**. The following are skipped:
-
-- `Future<void>` / `Stream<void>` return types
-- Methods annotated with `@repoMutation` or `@ignoreRepo`
-- Methods whose names start with `create`, `update`, `delete`, `set`, `save`,
-  `add`, `remove`, `put`, or `post`
-
-Force generation for edge cases with `@repoQuery` or
-`@RepoQueryAnnotation(...)`.
-
-After a mutation, refresh cached reads:
+### 2. Implement the repository
 
 ```dart
-invalidateRepoDataProviders(ref);
+class BookRepoImpl implements BookRepo {
+  @override
+  Future<List<Book>> getBooks({String search = ''}) async { ... }
+
+  @override
+  Future<Book> getBook(String id) async { ... }
+
+  @override
+  Future<void> deleteBook(String id) async { ... }
+}
 ```
 
-## Keep-alive vs auto-dispose (5.1.0)
+### 3. Run the builder
+
+```bash
+dart run build_runner build
+```
+
+This creates **`book_repo.repo.g.dart`** — a standalone library you import in
+widgets or other providers:
+
+```dart
+import 'book_repo.repo.g.dart';
+```
+
+> **Note (5.0.0+):** Repository providers are built with the public Riverpod
+> API (`FutureProvider`, `StreamProvider`, `Provider`). They are **not**
+> processed by `riverpod_generator`. Only your hand-written `@Riverpod` function
+> needs a `part '*.g.dart';` directive.
+
+## Generated output
+
+For each query method, the generator emits a provider that delegates to your
+repository instance:
+
+```dart
+// book_repo.repo.g.dart (generated)
+
+import 'package:riverpod/riverpod.dart';
+import 'book_repo.dart';
+
+export 'book_repo.dart';
+
+final bookRepoGetBooksProvider =
+    FutureProvider.autoDispose.family<List<Book>, ({String search})>((ref, arg) {
+  return ref.watch(bookRepoProvider).getBooks(search: arg.search);
+});
+
+final bookRepoGetBookProvider =
+    FutureProvider.autoDispose.family<Book, String>((ref, id) {
+  return ref.watch(bookRepoProvider).getBook(id);
+});
+
+/// Invalidates every generated query provider for BookRepo.
+void invalidateBookRepoProviders(Ref ref) {
+  ref.invalidate(bookRepoGetBooksProvider);
+  ref.invalidate(bookRepoGetBookProvider);
+}
+```
+
+Provider kind is inferred from the return type:
+
+| Repository method return type | Generated provider |
+|------------------------------|-------------------|
+| `Future<T>` | `FutureProvider` |
+| `Stream<T>` | `StreamProvider` |
+| anything else | `Provider` |
+
+Parameters map to `.family`:
+
+| Method signature | Family argument |
+|-----------------|-----------------|
+| no parameters | plain provider |
+| one positional parameter | that type directly, e.g. `family<T, String>` |
+| named and/or multiple parameters | Dart record, e.g. `(search: 'dart')` |
+
+## Using providers in the UI
+
+```dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'book_repo.repo.g.dart';
+
+class BookList extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final books = ref.watch(
+      bookRepoGetBooksProvider((search: '')),
+    );
+
+    return books.when(
+      loading: () => const CircularProgressIndicator(),
+      error: (err, _) => Text('Error: $err'),
+      data: (list) => ListView(
+        children: [for (final b in list) Text(b.title)],
+      ),
+    );
+  }
+}
+```
+
+## Mutations vs queries
+
+Providers are generated **only for reads**. A method is skipped when any of
+these apply:
+
+| Rule | Example |
+|------|---------|
+| Returns `Future<void>` or `Stream<void>` | `Future<void> deleteBook(String id)` |
+| Annotated with `@repoMutation` or `@ignoreRepo` | `@repoMutation Future<User> archiveUser()` |
+| Name starts with a mutation prefix | `createOrder`, `updateProfile`, `deleteItem`, `setTheme`, `saveDraft`, `addComment`, `removeTag`, `putFile`, `postMessage` |
+
+### Force a query that looks like a mutation
+
+```dart
+@repoQuery
+Future<DeletedItemsReport> deleteReport({DateTime? since});
+```
+
+Or with an explicit constructor when you need parameters on the annotation:
+
+```dart
+@RepoQueryAnnotation()
+Future<DeletedItemsReport> deleteReport({DateTime? since});
+```
+
+### Refresh reads after a mutation
+
+Call the generated invalidation helper (name: `invalidate` + repo class name +
+`Providers`):
+
+```dart
+Future<void> onDeleteBook(WidgetRef ref, String id) async {
+  await ref.read(bookRepoProvider).deleteBook(id);
+  invalidateBookRepoProviders(ref);
+}
+```
+
+Do **not** wrap mutations in `FutureProvider` — call repository methods directly
+via `ref.read(bookRepoProvider).deleteBook(...)`.
+
+## Keep-alive vs auto-dispose
+
+By default, generated providers use `.autoDispose` (cache cleared when nothing
+listens).
+
+Keep every query provider alive for the repository:
 
 ```dart
 @RiverpodRepoAnnotation(keepAlive: true)
-abstract class RepoData { ... }
-
-@RepoQueryAnnotation(keepAlive: false) // override one method
-Future<List<int>> getTopGenres();
+abstract class BookRepo { ... }
 ```
 
-## Provider naming and usage
-
-Generated providers are prefixed with the repository class name in camelCase:
+Override a single method back to auto-dispose:
 
 ```dart
-// No parameters
-ref.watch(repoDataGetTopGenresProvider);
-
-// Single positional argument → .family
-ref.watch(repoDataGetCountryProvider('US'));
-
-// Named / multiple arguments → record family
-ref.watch(repoDataGetBooksProvider((search: 'dart', categoryId: '1')));
+@RiverpodRepoAnnotation(keepAlive: true)
+abstract class BookRepo {
+  @RepoQueryAnnotation(keepAlive: false)
+  Future<List<Book>> searchBooks(String query);
+}
 ```
 
-Return types map to provider kinds: `Future<T>` → `FutureProvider`,
-`Stream<T>` → `StreamProvider`, otherwise `Provider`.
+> Use `@RepoQueryAnnotation(keepAlive: false)` (not `@repoQuery(keepAlive: false)`)
+> — Dart only allows const constructor invocations on annotations when parameters
+> are passed.
 
-## Important
+## Annotations reference
 
-1. Provider names use the repository **class** name, not the provider function
-   name — but the `@Riverpod` function must still return an instance of that
-   class (e.g. `repoData` → `RepoData`).
-2. The `@Riverpod` provider name must match the repository class in camelCase
-   (`RepoData` → `repoDataProvider`).
+| Annotation | Target | Purpose |
+|------------|--------|---------|
+| `@riverpodRepo` | class | Shorthand for `@RiverpodRepoAnnotation()` — enable generation |
+| `@RiverpodRepoAnnotation({keepAlive})` | class | Enable generation; default `keepAlive` for all queries |
+| `@repoQuery` | method | Force provider generation (overrides mutation name heuristic) |
+| `@RepoQueryAnnotation({keepAlive})` | method | Force generation; optional per-method `keepAlive` |
+| `@repoMutation` / `@ignoreRepo` | method | Skip provider generation |
 
-## Example
+## Provider naming rules
 
-See the [`example/`](example/) directory in this repository.
+1. **Repository class name** drives generated provider names:
+   `BookRepo` + `getBooks` → `bookRepoGetBooksProvider`
+2. **Your `@Riverpod` function** must return that class and use camelCase of the
+   class name: `BookRepo` → `bookRepo` → `bookRepoProvider`
+3. Import **`*.repo.g.dart`** for generated query providers; keep
+   **`part '*.g.dart'`** only on the source file for your `@Riverpod` provider
+
+## Migration
+
+### From 4.x → 5.0
+
+- Output is now a single **`*.repo.g.dart`** file (no `*.repo.dart` part file)
+- Remove `part 'foo.repo.dart';` from source files
+- Import `foo.repo.g.dart` where you use generated providers
+- Parameterized methods now use `.family` (records for named/multi-arg methods)
+
+### From 5.0 → 5.1
+
+- Mutation methods no longer get providers — add `@repoQuery` if a read was skipped
+- Use `invalidate{RepoName}Providers(ref)` after writes
+- Package is pure Dart (no Flutter SDK required in `pubspec.yaml`)
+- Annotations are exported from `package:riverpod_repo/riverpod_repo.dart`
+
+## Example project
+
+See [`example/`](example/) for a full repository with:
+
+- class-level `keepAlive`
+- per-method `@RepoQueryAnnotation(keepAlive: false)`
+- a `Future<void>` mutation (`deleteBook`) with no generated provider
+- custom model imports (`Student`, `Country`, `Hello`)
+
+Run generation from the repo root:
+
+```bash
+dart run build_runner build
+```
 
 ## License
 

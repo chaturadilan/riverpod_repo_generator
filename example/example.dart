@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:riverpod_repo/annotations.dart';
+import 'package:riverpod_repo/riverpod_repo.dart';
 
 import 'country.dart';
 import 'student.dart';

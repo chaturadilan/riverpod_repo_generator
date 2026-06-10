@@ -2,7 +2,7 @@ name: riverpod_repo
 description: >-
   Generate Riverpod FutureProvider, StreamProvider, and Provider declarations
   from repository interfaces using the repository pattern.
-version: 5.1.0
+version: 5.1.1
 homepage: https://dilan.me
 repository: https://github.com/chaturadilan/riverpod_repo_generator
 issue_tracker: https://github.com/chaturadilan/riverpod_repo_generator/issues
