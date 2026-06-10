@@ -110,6 +110,21 @@
 * Regenerated example output and added a `getCountry` method to demonstrate custom model import generation
 * Cleaned up the example to pass static analysis with no issues
 
+## 5.1.0
+
+* Skip provider generation for repository mutations: `Future<void>` /
+  `Stream<void>` returns, methods annotated with `@repoMutation` / `@ignoreRepo`,
+  and methods whose names start with common mutation prefixes (`create`,
+  `update`, `delete`, etc.). Use `@repoQuery` to force generation when a
+  method name looks like a mutation but is still a read.
+* Add `@RiverpodRepoAnnotation(keepAlive: true)` and `@repoQuery(keepAlive: …)` to
+  control whether generated providers use `.autoDispose` (default) or stay
+  alive.
+* Generate `invalidate{RepoName}Providers(Ref ref)` to invalidate every
+  query provider for a repository after a mutation.
+* Drop the Flutter SDK dependency so the package is a pure Dart build tool;
+  export annotations from `package:riverpod_repo/riverpod_repo.dart`.
+
 ## 5.0.0
 
 * **Breaking:** The generator now emits a single self-contained `*.repo.g.dart`

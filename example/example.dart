@@ -9,13 +9,14 @@ part 'example.g.dart';
 @Riverpod(keepAlive: true)
 RepoData repoData(Ref ref) => RepoDataImpl();
 
-@riverpodRepo
+@RiverpodRepoAnnotation(keepAlive: true)
 /// Repository class to get Data
 abstract class RepoData {
   /// Get the books
   Future<List<Student>> getBooks({String search = '', String categoryId = ''});
 
-  /// Get the top  genres
+  /// Get the top  genres (auto-dispose overrides class keepAlive)
+  @RepoQueryAnnotation(keepAlive: false)
   Future<List<int>> getTopGenres();
 
   /// Get the top books by genre
@@ -25,6 +26,9 @@ abstract class RepoData {
 
   /// Get the country by code
   Future<Country> getCountry(String code);
+
+  /// Mutation — no provider is generated
+  Future<void> deleteBook(String bookId);
 }
 
 /// Repository Implementation class to get Data
@@ -56,6 +60,11 @@ class RepoDataImpl implements RepoData {
   /// Implimentation of the getCountry method
   @override
   Future<Country> getCountry(String code) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> deleteBook(String bookId) {
     throw UnimplementedError();
   }
 }

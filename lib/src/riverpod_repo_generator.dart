@@ -19,10 +19,25 @@ import 'model_visitor.dart';
 /// The kind of Riverpod provider that maps to a repository method.
 enum _ProviderKind { future, stream, sync }
 
+const _repoMutationChecker = TypeChecker.typeNamed(RepoMutationAnnotation);
+const _repoQueryChecker = TypeChecker.typeNamed(RepoQueryAnnotation);
+
+const _mutationNamePrefixes = [
+  'create',
+  'update',
+  'delete',
+  'set',
+  'save',
+  'add',
+  'remove',
+  'put',
+  'post',
+];
+
 /// RiverPodRepoGenerator class of the Riverpod Repo
 ///
 /// Generates a single, self-contained Dart library that exposes one Riverpod
-/// provider per repository method. The output relies solely on the public
+/// provider per repository query method. The output relies solely on the public
 /// Riverpod API (`FutureProvider`, `StreamProvider`, `Provider` and their
 /// `.autoDispose`/`.family` builders), so no secondary `riverpod_generator`
 /// step (and therefore no extra `*.g.dart` part file) is required.
@@ -38,16 +53,27 @@ class RiverPodRepoGenerator
     final visitor = ModelVisitor();
     element.visitChildren(visitor);
 
+    final classKeepAlive = annotation.read('keepAlive').boolValue;
+
+    final queryMethods = <Map<String, dynamic>>[];
+    for (var methodEntry in visitor.methods.values) {
+      final MethodElement methodElement =
+          methodEntry['element'] as MethodElement;
+      if (_shouldGenerateProvider(methodElement)) {
+        queryMethods.add(methodEntry);
+      }
+    }
+
     // Collect all types used in method signatures so the generated library
     // can import the models it references.
     final Set<String> requiredImports = {};
 
-    for (var methodEntry in visitor.methods.values) {
-      final MethodElement methodElement = methodEntry["element"];
+    for (var methodEntry in queryMethods) {
+      final MethodElement methodElement = methodEntry['element'];
 
       _collectTypeImports(methodElement.returnType, requiredImports, element);
 
-      final List<FormalParameterElement> parameters = methodEntry["parameters"];
+      final List<FormalParameterElement> parameters = methodEntry['parameters'];
       for (var param in parameters) {
         _collectTypeImports(param.type, requiredImports, element);
       }
@@ -60,7 +86,7 @@ class RiverPodRepoGenerator
         .last
         .replaceAll('.dart', '');
 
-    buffer.writeln("// ignore_for_file: type=lint, type=warning");
+    buffer.writeln('// ignore_for_file: type=lint, type=warning');
     buffer.writeln();
     buffer.writeln("import 'package:riverpod/riverpod.dart';");
     buffer.writeln("import '$sourceFile.dart';");
@@ -74,16 +100,18 @@ class RiverPodRepoGenerator
     buffer.writeln();
 
     final className = visitor.className;
-    final repoProvider = "${className.camelCase}Provider";
+    final repoProvider = '${className.camelCase}Provider';
+    final generatedProviderNames = <String>[];
 
-    for (var methodEntry in visitor.methods.values) {
-      final MethodElement methodElement = methodEntry["element"];
+    for (var methodEntry in queryMethods) {
+      final MethodElement methodElement = methodEntry['element'];
       final methodName = methodElement.name ?? '';
       if (methodName.isEmpty) continue;
 
-      final providerName = "${className.camelCase}${methodName.pascalCase}";
+      final providerName = '${className.camelCase}${methodName.pascalCase}';
+      generatedProviderNames.add('${providerName}Provider');
 
-      final List<FormalParameterElement> parameters = methodEntry["parameters"];
+      final List<FormalParameterElement> parameters = methodEntry['parameters'];
       final positional = parameters
           .where((p) => p.isPositional)
           .toList(growable: false);
@@ -96,52 +124,121 @@ class RiverPodRepoGenerator
         _ProviderKind.stream => 'StreamProvider',
         _ProviderKind.sync => 'Provider',
       };
+      final keepAlive = _keepAliveForMethod(methodElement, classKeepAlive);
+      final autoDispose = keepAlive ? '' : '.autoDispose';
 
       // Documentation header for the generated provider.
       buffer.writeln(
-        "/// Repository: ${className.pascalCase}, Method: ${methodName.camelCase}",
+        '/// Repository: ${className.pascalCase}, Method: ${methodName.camelCase}',
       );
-      buffer.writeln("///");
-      final comments = methodEntry["comments"];
+      buffer.writeln('///');
+      final comments = methodEntry['comments'];
       if (comments != null) {
         buffer.writeln(comments);
       }
 
       if (parameters.isEmpty) {
         buffer.writeln(
-          "final ${providerName}Provider = $providerBase.autoDispose<$valueType>((ref) {",
+          'final ${providerName}Provider = '
+          '$providerBase$autoDispose<$valueType>((ref) {',
         );
-        buffer.writeln("  return ref.watch($repoProvider).$methodName();");
-        buffer.writeln("});");
+        buffer.writeln('  return ref.watch($repoProvider).$methodName();');
+        buffer.writeln('});');
       } else if (positional.length == 1 && named.isEmpty) {
         final param = positional.first;
         final argName = param.name ?? 'arg';
         final argType = param.type.getDisplayString();
         buffer.writeln(
-          "final ${providerName}Provider = $providerBase.autoDispose"
-          ".family<$valueType, $argType>((ref, $argName) {",
+          'final ${providerName}Provider = '
+          '$providerBase$autoDispose.family<$valueType, $argType>((ref, $argName) {',
         );
         buffer.writeln(
-          "  return ref.watch($repoProvider).$methodName($argName);",
+          '  return ref.watch($repoProvider).$methodName($argName);',
         );
-        buffer.writeln("});");
+        buffer.writeln('});');
       } else {
         final argType = _recordType(positional, named);
         final invocation = _recordInvocation(positional, named);
         buffer.writeln(
-          "final ${providerName}Provider = $providerBase.autoDispose"
-          ".family<$valueType, $argType>((ref, arg) {",
+          'final ${providerName}Provider = '
+          '$providerBase$autoDispose.family<$valueType, $argType>((ref, arg) {',
         );
         buffer.writeln(
-          "  return ref.watch($repoProvider).$methodName($invocation);",
+          '  return ref.watch($repoProvider).$methodName($invocation);',
         );
-        buffer.writeln("});");
+        buffer.writeln('});');
       }
 
       buffer.writeln();
     }
 
+    if (generatedProviderNames.isNotEmpty) {
+      final invalidateFn = 'invalidate${className.pascalCase}Providers';
+      buffer.writeln(
+        '/// Invalidates every generated query provider for ${className.pascalCase}.',
+      );
+      buffer.writeln(
+        '/// Call after a repository mutation so cached reads are refreshed.',
+      );
+      buffer.writeln('void $invalidateFn(Ref ref) {');
+      for (final provider in generatedProviderNames) {
+        buffer.writeln('  ref.invalidate($provider);');
+      }
+      buffer.writeln('}');
+      buffer.writeln();
+    }
+
     return buffer.toString();
+  }
+
+  /// Whether a provider should be generated for [method].
+  bool _shouldGenerateProvider(MethodElement method) {
+    if (_repoMutationChecker.hasAnnotationOf(method)) {
+      return false;
+    }
+    if (_repoQueryChecker.hasAnnotationOf(method)) {
+      return true;
+    }
+    if (_isVoidAsyncReturn(method.returnType)) {
+      return false;
+    }
+    final methodName = method.name ?? '';
+    if (methodName.isEmpty) {
+      return false;
+    }
+    return !_looksLikeMutationName(methodName);
+  }
+
+  bool _looksLikeMutationName(String methodName) {
+    for (final prefix in _mutationNamePrefixes) {
+      if (methodName.startsWith(prefix)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool _isVoidAsyncReturn(DartType type) {
+    final kind = _providerKind(type);
+    if (kind == _ProviderKind.sync) {
+      return type is VoidType;
+    }
+    if (type is! ParameterizedType || type.typeArguments.isEmpty) {
+      return false;
+    }
+    return type.typeArguments.first is VoidType;
+  }
+
+  bool _keepAliveForMethod(MethodElement method, bool classKeepAlive) {
+    final queryAnnotation = _repoQueryChecker.firstAnnotationOf(method);
+    if (queryAnnotation != null) {
+      final reader = ConstantReader(queryAnnotation);
+      final keepAlive = reader.peek('keepAlive');
+      if (keepAlive != null && !keepAlive.isNull) {
+        return keepAlive.boolValue;
+      }
+    }
+    return classKeepAlive;
   }
 
   /// Determine which provider type maps to the given return [type].
