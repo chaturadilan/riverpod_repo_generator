@@ -110,6 +110,14 @@
 * Regenerated example output and added a `getCountry` method to demonstrate custom model import generation
 * Cleaned up the example to pass static analysis with no issues
 
+## 5.1.2
+
+* Raise the Dart SDK constraint to `^3.12.0`.
+* Upgrade dependencies to latest compatible versions (`analyzer` 13+/14,
+  `build` 4.0.10, `source_gen` 4.2.4, `riverpod` 3.4.2,
+  `riverpod_annotation` 4.0.6, `riverpod_generator` 4.0.8, `build_runner` 2.16).
+* Regenerate the example providers against the upgraded toolchain.
+
 ## 5.1.1
 
 * Expand README with full setup guide, generated output samples, annotations

@@ -27,10 +27,10 @@ Add to **`dev_dependencies`** (this is a code generator, not a runtime dependenc
 
 ```yaml
 dev_dependencies:
-  riverpod_repo: ^5.1.1
-  build_runner: ^2.15.0
-  riverpod_annotation: ^4.0.2
-  riverpod_generator: ^4.0.3
+  riverpod_repo: ^5.1.2
+  build_runner: ^2.16.0
+  riverpod_annotation: ^4.0.6
+  riverpod_generator: ^4.0.8
 ```
 
 Your app still needs **`riverpod`** (or `flutter_riverpod`) at runtime.
